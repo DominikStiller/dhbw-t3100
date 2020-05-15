@@ -1,0 +1,174 @@
+\documentclass[numbers=noenddot]{scrreprt}
+
+
+%----------------------------------------------------------------------------
+% Package Includes
+%----------------------------------------------------------------------------
+\usepackage[USenglish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+%\usepackage{showframe}
+\usepackage{tocloft}
+\usepackage{chngcntr}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{interval}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{geometry}
+\usepackage{textcomp}
+\usepackage[binary-units=true]{siunitx}
+\usepackage{setspace}
+\usepackage{array}
+\usepackage[outputdir=build]{minted}
+\usepackage[toc,page]{appendix}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{makecell}
+\usepackage{csquotes}
+\usepackage{xcolor}
+\usepackage[bottom,hang,flushmargin]{footmisc}
+\usepackage[toc,nonumberlist,acronym,nopostdot]{glossaries}
+\usepackage[
+	backend=biber,
+	bibwarn=true,
+	bibencoding=utf8,
+	sortlocale=en_US,
+	%url=false,
+	style=ieee
+]{biblatex}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+
+
+%----------------------------------------------------------------------------
+% Package Config
+%----------------------------------------------------------------------------
+
+% KOMA-Script
+\KOMAoptions{
+	pagesize=pdftex,
+	twoside=false,		% Einseitiger Druck.
+	parskip=half,		% Halbe Zeile Abstand zwischen Absätzen.
+	headheight = 12pt,	% Höhe der Kopfzeile
+	headsepline,		% Linie nach Kopfzeile.
+	footsepline,		% Linie vor Fusszeile.
+	footheight = 16pt,	% Höhe der Fusszeile
+	abstract=true,		% Abstract Überschriften
+	DIV=calc,			% Satzspiegel berechnen
+	headinclude=false,	% Kopfzeile nicht in den Satzspiegel einbeziehen
+	footinclude=false,	% Fußzeile nicht in den Satzspiegel einbeziehen
+	listof=totoc,		% Abbildungs-/ Tabellenverzeichnis im Inhaltsverzeichnis darstellen
+	toc=bibliography	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
+}
+\clubpenalty = 10000 % schließt Seitenumbruch nach der ersten Zeile eines neuen Absatzes aus
+\widowpenalty = 10000 % schließt die letzte Zeile eines Absatzes steht auf einer neuen Seite aus
+\displaywidowpenalty=10000
+\renewcommand{\topfraction}{.75}
+
+% graphicx
+\graphicspath{ {./images/} }
+
+% biblatex
+\addbibresource{./misc/references.bib}
+
+% Microtype
+% http://www.khirevich.com/latex/micrsotype/
+\SetProtrusion{encoding={*},family={bch},series={*},size={6,7}}
+			     {1={ ,750},2={ ,500},3={ ,500},4={ ,500},5={ ,500},
+	             6={ ,500},7={ ,600},8={ ,500},9={ ,500},0={ ,500}}
+\SetExtraKerning[unit=space]
+   				{encoding={*}, family={bch}, series={*}, size={notesize,small,normalsize}}
+				{\textendash={400,400}, % en-dash, add more space around it
+	               "28={ ,150}, % left bracket, add space from right
+	               "29={150, }, % right bracket, add space from left
+					\textquotedblleft={ ,150}, % left quotation mark, space from right
+					\textquotedblright={150, }} % right quotation mark, space from left
+\SetExtraKerning[unit=space]
+				{encoding={*}, family={qhv}, series={b}, size={large,Large}}
+				{1={-200,-200}, \textendash={400,400}}
+\SetTracking{encoding={*}, shape=sc}{40}
+\microtypecontext{spacing=nonfrench}
+
+% glossary
+\renewcommand*{\glsgroupskip}{}
+
+% chngcntr
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
+\counterwithout{equation}{chapter}
+
+% minted
+\usemintedstyle{friendly}
+\newminted{python}{
+	mathescape,
+	linenos,
+	numbersep=5pt,
+	frame=lines,
+	framesep=2mm
+}
+\newmintinline{python}{}
+
+% amsmath
+\DeclareMathOperator*{\argmax}{arg\,max}
+% https://tex.stackexchange.com/a/43009
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+\makeatother
+
+% xcolor
+\definecolor{hpe-green}{HTML}{01A982}
+\definecolor{hpe-orange}{HTML}{FF8300}
+
+% Enable ligatures in pdf figures
+\pdfinclusioncopyfonts=1
+
+
+%----------------------------------------------------------------------------
+% Styling
+%----------------------------------------------------------------------------
+
+% Page
+\geometry{margin=2.5cm, foot=1cm, bindingoffset=0mm}%bindingoffset=8mm
+
+% 
+\KOMAoptions{fontsize=12pt}
+\DeclareMathSizes{12pt}{12pt}{10pt}{10pt}
+\setkomafont{title}{\Huge\textbf}
+\onehalfspacing
+
+% Table of Contents
+\setcounter{tocdepth}{1}
+
+\renewcommand{\appendixname}{Appendix}
+
+
+%----------------------------------------------------------------------------
+% Custom Commands
+%----------------------------------------------------------------------------
+
+\newcommand*{\vcenteredhboxleft}[1]{
+	\raggedright
+	\begingroup
+	\setbox0=\hbox{#1}\parbox{\wd0}{\box0}
+	\endgroup
+}
+
+\newcommand*{\vcenteredhboxright}[1]{
+	\raggedleft
+	\begingroup
+	\setbox0=\hbox{#1}\parbox{\wd0}{\box0}
+	\endgroup
+}
+
+\newcommand{\multilinecell}[2][c]{%
+	\begin{tabular}
+		[#1]{@{}l@{}}#2
+	\end{tabular}
+}
+
+\newcommand\todo[1]{\textcolor{orange}{#1}}

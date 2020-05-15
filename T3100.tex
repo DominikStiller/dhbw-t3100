@@ -1,0 +1,92 @@
+\title{A real-time state estimation for an electric race car}
+\author{Dominik Stiller}
+\date{June 8, 2020}
+
+\include{misc/settings}
+
+\makeglossaries
+\include{misc/glossary}
+\include{misc/acronyms}
+
+\begin{document}
+	\pagenumbering{Roman}
+	\pagestyle{empty}
+	\makeatletter
+	\begin{titlepage}
+		\include{misc/title}
+	\end{titlepage}
+	
+	\section*{Declaration of Authorship}
+	\input{misc/declaration_of_authorship}
+	\makeatother
+	\vfill
+	
+	\section*{Confidentiality Clause}
+	\input{misc/confidentiality_clause}
+	\vfill
+
+	\begin{abstract}
+		\input{content/Abstract}
+	\end{abstract}
+
+	\setlength{\cftbeforetoctitleskip}{2.1em}
+	\begin{spacing}{1.15}
+	   \tableofcontents
+	\end{spacing}
+	\clearpage
+	\thispagestyle{empty}
+	
+	\pagestyle{plain}
+	
+	%----------------------------------------------------------------------------
+	% Preface
+	%----------------------------------------------------------------------------
+	\printacronyms
+	\clearpage
+	
+	\addcontentsline{toc}{chapter}{\listfigurename}
+	\listoffigures
+	\clearpage
+	\addcontentsline{toc}{chapter}{\listtablename}
+	\listoftables
+	\renewcommand\listoflistingscaption{List of Source Codes}
+	\listoflistings
+	\clearpage
+	
+	\pagenumbering{arabic}
+	
+	\pagestyle{headings}
+	
+	\addtocontents{toc}{\protect\thispagestyle{empty}}
+	%\obeylines
+	%----------------------------------------------------------------------------
+	% Content
+	%----------------------------------------------------------------------------
+	\chapter{Introduction}
+	\input{content/Introduction}
+	\chapter{Background}
+	\input{content/Background}
+	\chapter{Design}
+	\input{content/Design}
+	\chapter{Implementation}
+	\input{content/Implementation}
+	\chapter{Evaluation}
+	\input{content/Evaluation}
+	\chapter{Conclusion}
+	\input{content/Conclusion}
+		
+	
+	\clearpage
+	
+	%----------------------------------------------------------------------------
+	% Appendix
+	%----------------------------------------------------------------------------
+	
+	\cleardoublepage
+	\printbibliography
+
+	\printglossary[style=altlist]
+	
+	\appendix
+	\input{misc/appendix}
+\end{document}
