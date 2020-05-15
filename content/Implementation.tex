@@ -1,1 +1,15 @@
-Simulink, matlab, vdc integration, testing
+Since whole VDC is in Simulink because supported by ES910, state estimation as well
+Describe Simulink features: subsystems, busses, blocks
+
+Simulink acts as glue, great for modelling signal flow
+Matlab code for key algorithm implementations, more readable and unit testable
+State estimation is separate model to allow for independent development
+Architecture components as subsystems
+Reused components referenced model
+
+Strict busses and datatypes, units in simulink to avoid logical errors that are hard to find at compile-time
+
+Integration in VDC
+Build process and toolchain incl intecrio and inca for live telematics, monitoring and parametrization
+
+requires application for covariances during testing
