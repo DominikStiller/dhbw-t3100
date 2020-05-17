@@ -52,6 +52,9 @@
 	\renewcommand\listoflistingscaption{List of Source Codes}
 	\listoflistings
 	\clearpage
+	\include{misc/symbols}
+	\printnomenclature
+	\clearpage
 	
 	\pagenumbering{arabic}
 	
@@ -88,5 +91,6 @@
 	\printglossary[style=altlist]
 	
 	\appendix
+	\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 	\input{misc/appendix}
 \end{document}

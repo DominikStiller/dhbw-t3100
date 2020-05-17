@@ -14,13 +14,14 @@
 \usepackage{chngcntr}
 \usepackage{amsmath}
 \usepackage{mathtools}
+\usepackage{mathbbol}
 \usepackage{interval}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage[hidelinks]{hyperref}
 \usepackage{geometry}
 \usepackage{textcomp}
-\usepackage[binary-units=true]{siunitx}
+\usepackage{siunitx}
 \usepackage{setspace}
 \usepackage{array}
 \usepackage[outputdir=build]{minted}
@@ -32,6 +33,7 @@
 \usepackage{xcolor}
 \usepackage[bottom,hang,flushmargin]{footmisc}
 \usepackage[toc,nonumberlist,acronym,nopostdot]{glossaries}
+\usepackage[intoc]{nomencl}
 \usepackage[
 	backend=biber,
 	bibwarn=true,
@@ -115,14 +117,22 @@
 \DeclareMathOperator*{\argmax}{arg\,max}
 % https://tex.stackexchange.com/a/43009
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
 \makeatletter
 \let\oldabs\abs
 \def\abs{\@ifstar{\oldabs}{\oldabs*}}
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
 \makeatother
 
 % xcolor
 \definecolor{hpe-green}{HTML}{01A982}
 \definecolor{hpe-orange}{HTML}{FF8300}
+
+% nomencl
+\renewcommand{\nomname}{List of Symbols}
+\newcommand{\nomunit}[1]{\renewcommand{\nomentryend}{\hspace*{\fill}\si{#1}}}
+\makenomenclature
 
 % Enable ligatures in pdf figures
 \pdfinclusioncopyfonts=1

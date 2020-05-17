@@ -1,0 +1,26 @@
+\chapter{Bus Definitions}
+Bus definitions
+
+\chapter{Expanded Rigid Body Equations}
+\section{Transformation of Linear Velocity}\label{sec:appendix-transformation-linvel}
+\begin{align*}%
+\begin{bmatrix}v_x \\ v_y \\ v_z\end{bmatrix}%
+&=\begin{bmatrix}v_{x}^{CG} \\ v_{y}^{CG} \\ v_{z}^{CG}\end{bmatrix}%
++\begin{bmatrix}\dot{\phi} \\ \dot{\theta} \\ \dot{\psi}\end{bmatrix}\times\begin{bmatrix}r_x \\ r_y \\ r_z\end{bmatrix} \\%
+&=\begin{bmatrix}v_{x}^{CG} \\ v_{y}^{CG} \\ v_{z}^{CG}\end{bmatrix}%
++\begin{bmatrix}\dot{\theta}r_z - \dot{\psi}r_y \\\dot{\psi}r_x - \dot{\phi}r_z \\\dot{\phi}r_y - \dot{\theta}r_x\end{bmatrix}%
+\end{align*}
+
+\section{Transformation of Linear Acceleration}\label{sec:appendix-transformation-linacc}
+\begin{align*}%
+\begin{bmatrix}a_x \\ a_y \\ a_z\end{bmatrix}%
+&=\begin{bmatrix}a_{x}^{CG} \\ a_{y}^{CG} \\ a_{z}^{CG}\end{bmatrix}%
++\begin{bmatrix}\ddot{\phi} \\ \ddot{\theta} \\ \ddot{\psi}\end{bmatrix}\times\begin{bmatrix}r_x \\ r_y \\ r_z\end{bmatrix}%
++\begin{bmatrix}\dot{\phi} \\ \dot{\theta} \\ \dot{\psi}\end{bmatrix}\times \left(\begin{bmatrix}\dot{\phi} \\ \dot{\theta} \\ \dot{\psi}\end{bmatrix}\times\begin{bmatrix}r_x \\ r_y \\ r_z\end{bmatrix}\right)\\%
+&=\begin{bmatrix}a_{x}^{CG} \\ a_{y}^{CG} \\ a_{z}^{CG}\end{bmatrix}%
++\begin{bmatrix}\ddot{\phi} \\ \ddot{\theta} \\ \ddot{\psi}\end{bmatrix}\times\begin{bmatrix}r_x \\ r_y \\ r_z\end{bmatrix}%
++\begin{bmatrix}\dot{\phi} \\ \dot{\theta} \\ \dot{\psi}\end{bmatrix}\times\begin{bmatrix}\dot{\theta}r_z - \dot{\psi}r_y \\\dot{\psi}r_x - \dot{\phi}r_z \\\dot{\phi}r_y - \dot{\theta}r_x\end{bmatrix}\\%
+&=\begin{bmatrix}a_{x}^{CG} \\ a_{y}^{CG} \\ a_{z}^{CG}\end{bmatrix}%
++\begin{bmatrix}\ddot{\theta}r_z - \ddot{\psi}r_y \\\ddot{\psi}r_x - \ddot{\phi}r_z \\\ddot{\phi}r_y - \ddot{\theta}r_x\end{bmatrix}%
++\begin{bmatrix}\dot{\theta}(\dot{\phi}r_y - \dot{\theta}r_x) - \dot{\psi}(\dot{\psi}r_x - \dot{\phi}r_z)\\\dot{\psi}(\dot{\theta}r_z - \dot{\psi}r_y) - \dot{\phi}(\dot{\phi}r_y - \dot{\theta}r_x)\\\dot{\phi}(\dot{\psi}r_x - \dot{\phi}r_z) - \dot{\theta}(\dot{\theta}r_z - \dot{\psi}r_y)\end{bmatrix}%
+\end{align*}
