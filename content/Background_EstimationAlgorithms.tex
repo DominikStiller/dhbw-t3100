@@ -1,0 +1,16 @@
+Obtaining the true state of some physical system is next to impossible. Any sensor measurement contains noise and other errors, which distract from the underlying process. Therefore, the challenge is discerning errors from the true value. This is known as \textit{filtering problem}, where we want to obtain the best estimate $\hat{x}_t$ of the state variable $x_t$ at time $t$ based on past observations $z_s, s \leq t$~\cite[p.~67]{Mitter.1996}. Usually, this involves fusion of multiple sensors and physical models. In this section we explore common estimation methods to solve the filtering problem problem.
+
+goal: solve filtering problem and fuse sensors to obtain optimal state estimate
+
+kalman filter is most widely used, but unscented KF seems better~\cite[p.~401]{Julier.2004}
+
+
+http://www.anuncommonlab.com/articles/how-kalman-filters-work/index.html
+Estimation algorithms
+particle filter
+kalman filter
+EFK
+compare
+
+Define residual
+disable measurements using separate mask
