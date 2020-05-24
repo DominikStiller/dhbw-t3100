@@ -1,16 +1,72 @@
-Obtaining the true state of some physical system is next to impossible. Any sensor measurement contains noise and other errors, which distract from the underlying process. Therefore, the challenge is discerning errors from the true value. This is known as \textit{filtering problem}, where we want to obtain the best estimate $\hat{x}_t$ of the state variable $x_t$ at time $t$ based on past observations $z_s, s \leq t$~\cite[p.~67]{Mitter.1996}. Usually, this involves fusion of multiple sensors and physical models. In this section we explore common estimation methods to solve the filtering problem problem.
+Obtaining the true state of some physical system is next to impossible. Any sensor measurement contains noise and other errors, which distract from the underlying process. Therefore, the challenge is discerning errors from the true value. This is known as \textit{filtering problem}, where we want to obtain the best estimate $\hat{x}_k$ of the system state $x_k$ at time step $k$ based on past observations $z_i, i \leq k$~\cite[p.~67]{Mitter.1996}. Usually, this involves the fusion of multiple sensors and physical models. In this section we explore common estimation methods to solve the filtering problem problem. We will regard their discrete-time instead of their continuous-time versions, since digital observations are based on sampling with a finite rate.
 
-goal: solve filtering problem and fuse sensors to obtain optimal state estimate
+\subsection{Extended Kalman Filter}
+The Kalman filter~\cite{Kalman.1960} is the most widely used estimation algorithm~\cite[p.~401]{Julier.2004}. First developed for trajectory estimation in the Apollo space program, it now finds application in most vehicles, aircraft, spacecraft, but even in finance and econometrics. The Kalman filter assumes a linear system, which is often not the case, or only true in a small region of the full range. Therefore, a non-linear version based on the same ideas has been developed with the \gls{ekf}, which we will regard in this section.
 
-kalman filter is most widely used, but unscented KF seems better~\cite[p.~401]{Julier.2004}
+The idea of the \gls{ekf} is simple yet powerful: we observe the physical system through noisy measurements but predict the state with a mathematical model of the system. At every time step, we fuse the observations with the predictions based on our confidence in either, basically resulting in a weighted average. For example, a noisy measurement is rather unreliable, while models can never capture all nuances and uncertainties. The fusion yields a good estimate of the true state of the system, better than only measurements or predictions could alone.
+
+The model describes the \textit{state} $x_k$ of the system at time $k$. For example, a train on a track can be described by its position and velocity which are related, so the state is two-dimensional. How the state evolves over time according to a process is shown in the \textit{process equation} \ref{eq:ekf-process-equation}. The process function $f(x_{k-1}, u_k)$ propagates the previous state $x_{k-1}$ and is controlled by external inputs $u_k$, e.g., the train engine accelerating the train, and disturbed process noise $w_k$, which represents unmodeled behavior, e.g., air resistance or friction. The process noise is assumed to be Gaussian with zero mean and a diagonal covariance matrix $Q_k$, i.e no noise terms are correlated.
+\begin{equation}\label{eq:ekf-process-equation}%
+x_k = f(x_{k-1}, u_k) + w_k%
+\end{equation}
+
+While the state is inherent to the system, it can not be directly observed. Rather, we have \textit{observations} $z_k$. The elements of $z_k$ and $x_k$ must not necessarily coincide, i.e. the observation space and state space can differ; for example, we might have multiple observations of the train's velocity but none of the position. The measurement is described by the \textit{measurement equation} \ref{eq:ekf-measurement-equation}. The measurement function $h(x_k)$ gives the observation vector which is disturbed by measurement noise, e.g., resulting from the sensor itself or transmission errors. The measurement noise is assumed to be Gaussian with zero mean and a diagonal covariance matrix $R_k$. We use the measurement equation to be able to fuse real measurements with pseudo-measurements from our model.
+\begin{equation}\label{eq:ekf-measurement-equation}%
+z_k = h(x_k) + v_k%
+\end{equation}
+
+The process and measurements equations acknowledge, that the state can only be modeled and observed with some degree of uncertainty. Therefore, in addition to the state estimate $\hat{x}_k$, we want to keep track of its covariance $P_k$, which is zero mean as well. Together with linearizations, this assumption allows the \gls{ekf} to be much more computationally efficient than more generally applicable algorithms like the particle filter.
+
+The \gls{ekf} algorithm~\cite[p.~16~ff.]{Haykin.2001} is recursive, with each iteration comprising a prediction step and a correction step, i.e. the previous state is first propagated to the current time step using the model and then corrected with the measurements from the real system. In the following description of the algorithm, we distinguish between the predicted state estimate $\hat{x}_k^-$ and covariance $P_k^-$, and the corrected state estimate $\hat{x}_k^+$ and covariance $P_k^+$.
+
+\begin{description}
+\item[Prediction] At the beginning of every iteration, the previous corrected state is propagated using the process function to predict the current state (equation \ref{eq:ekf-state-propagation}). Note that the prediction only depends on the directly previous state, not any other states in the history, revealing that the \gls{ekf} assumes an underlying Markov process.
+\begin{equation}\label{eq:ekf-state-propagation}%
+\hat{x}_k^- = f(\hat{x}_{k-1}^+, u_k)%
+\end{equation}
+
+The previous covariance also needs to be propagated, since the estimate uncertainty might change with every step (equation \ref{eq:ekf-cov-propagation}). The Jacobian matrix $F_k$ of the process function, which can be though of as a vector derivative, needs to be evaluated for this step (equation \ref{eq:ekf-process-jacobian}). Additionally, the process noise needs to be accounted for model mismatches, since there are always aspects of the real-world which cannot be modeled. Therefore, leveraging the additive property of Gaussian noise, the process covariance $Q_k$ is added to the propagated covariance.
+\begin{align}\label{eq:ekf-cov-propagation}%
+P_k^- &= F_k P_{k-1} F_k^T + Q_k \\%
+\label{eq:ekf-process-jacobian}%
+F_k &= \left. \frac{\partial f}{\partial x} \right|_{x = \hat{x}_{k-1}^+}%
+\end{align}
+
+The measurement function then generates pseudo-measurements from the estimated state (equation \ref{eq:ekf-pseudomeasurement}).
+\begin{equation}\label{eq:ekf-pseudomeasurement}%
+\hat{z}_k = h(\hat{x}_k^-)%
+\end{equation}
 
 
-http://www.anuncommonlab.com/articles/how-kalman-filters-work/index.html
-Estimation algorithms
-particle filter
-kalman filter
-EFK
-compare
+\item[Correction] Once the prediction has been made, it can be corrected with observations obtained from the real system by taking a weighted average of both. The weighting is determined by the \textit{Kalman gain} $K_k \in [0, 1]$ (equation \ref{eq:ekf-kalman-gain}), which also maps back from the observation space into the state space using the Jacobian matrix $H_k$ of the measurement function (equation \ref{eq:ekf-measurement-jacobian}). The Kalman gain is defined as the ratio of the state-innovation covariance $P_{xy}$ to the innovation covariance $P_{yy}$, and so it captures the uncertainty in the measurements and the model prediction. When the measurement covariance $R_k$ is small relative to the model covariance, the Kalman gain is high and so the measurement is weighted more. On the other hand, when the measurement noise is high, the Kalman gain approaches zero and the model prediction is weighted more.
+\begin{align}\label{eq:ekf-kalman-gain}%
+K_k &= \underbrace{P_k^- H_k^T}_\textrm{$P_{xy}$} {\underbrace{(H_k P_k^- H_k^T + R_k)}_\textrm{$P_{yy}$}}^{-1} \\%
+\label{eq:ekf-measurement-jacobian}%
+H_k &= \left. \frac{\partial h}{\partial x} \right|_{x = \hat{x}_{k}^-}%
+\end{align}
 
-Define residual
-disable measurements using separate mask
+In the best case, the model and the measurements coincide. However, this is usually not the case, so the real measurements $z_k$ and the pseudo-measurements $\hat{z}_k$ differ, resulting in an \textit{innovation} $y_k$, also called \textit{residual}. The absolute innovation is higher when there is a larger mismatch between the model and the real system. The Kalman gain now determines, how much of the residual is used to correct the prediction. The posterior state estimate $\hat{x}_k^+$ is the final, best estimate for the iteration $k$ and will be used in the next time step (equation \ref{eq:ekf-state-correction}).
+\begin{equation}\label{eq:ekf-state-correction}%
+\hat{x}_k^+ = \hat{x}_k^- + K(\underbrace{z_k - \hat{z}_k}_\textrm{$y_k$})%
+\end{equation}
+
+Additionally, the covariance matrix needs to be updated to account for the correction (equation \ref{eq:ekf-cov-correction}). The covariance is reduced based on the Kalman gain, signifying how the certainty in our estimate has increased by the correction.
+\begin{equation}\label{eq:ekf-cov-correction}%
+P_k^+ = (I - K H_k)P_k^-%
+\end{equation}
+\end{description}
+
+
+\subsection{Unscented Kalman Filter}
+While the \gls{ekf} has been successfully applied to problems for a long time, it suffers a number of limitations~\cite[p.~402]{Julier.2004}:
+\begin{itemize}
+\item The error propagation in equation \ref{eq:ekf-cov-propagation} is only reliably if the linearization in form of the Jacobian matrix $F_k$ is sufficiently accurate. This might not be the case in highly non-linear systems or under the wrong initial estimate. In the worst case, the estimate might even diverge.
+\item Linearization can only be applied to differentiable functions, i.e. processes for which a Jacobian exists. Discontinuities and singularities might exist in some cases, making differentiation impossible.
+\item The derivation of Jacobian matrices can be very difficult and error-prone for complex systems, both the equations themselves and the conversion to code.
+\end{itemize}
+Therefore, alternatives to the \gls{ekf} have been developed. A promising algorithm is the \gls{ukf}~\cite{SimonJ.Julier.1997}.
+
+At the core of the \gls{ukf}'s improvement relies on the \gls{ut}. This transformation is a method to approximate the properties of a statistical distribution undergoing a non-linear transformation.
+
+Through the use of the \gls{ut}, linearization of the Jacobian is rendered unnecessary, which aids the filter's stability in non-linear systems. Furthermore, no manual derivation of derivatives is necessary. Still, the performance is equal or better than the \gls{ekf}.
+% TODO disadvantages

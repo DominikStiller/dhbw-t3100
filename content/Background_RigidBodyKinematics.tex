@@ -108,7 +108,7 @@ Most sensor measurements are done in the vehicle coordinate system. Others, such
 
 
 \subsection{Components of Vehicle Acceleration}
-The motion of a rigid body in the earth-fixed reference frame can be understood as a composition of a rotation and a translation, in our case with the \gls{cog} as center of rotation. In vehicles, this rotation results from cornering.  The acceleration as experienced in the \gls{cog} is the result of the direct linear acceleration and the centripetal force resulting from the rotation, as shown in equation \ref{eq:cornering-acceleration}~\cite[p.~146]{Milliken.1996}. Other than in equation \ref{eq:offcenter-acceleration-3d}, the radius $R$ is not the distance to the \gls{cog} but the corner/curve radius. Since $R$ is usually not known, we can get rid of it using $R = \frac{v}{\dot{\psi}}$.
+The motion of a rigid body in the earth-fixed reference frame can be understood as a composition of a rotation and a translation, in our case with the \gls{cog} as center of rotation. In vehicles, this rotation results from cornering.  The acceleration as experienced in the \gls{cog} is the result of the direct linear acceleration and the centripetal force resulting from the rotation, as shown in equation \ref{eq:cornering-acceleration}~\cite[p.~146]{Milliken.1996}. Other than in equation \ref{eq:offcenter-acceleration-3d}, the radius $R$ is not the distance to the \gls{cog} but the corner/curve radius. Since $R$ is usually not known, we can get rid of it using $R = v_{\perp} / \dot{\psi}$ with the tangential velocity $v_{\perp}$.
 
 \begin{subequations}\label{eq:cornering-acceleration}
 \begin{alignat}{3}%
