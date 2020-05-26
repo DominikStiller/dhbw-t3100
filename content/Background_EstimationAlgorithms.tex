@@ -50,7 +50,7 @@ In the best case, the model and the measurements coincide. However, this is usua
 \hat{x}_k^+ = \hat{x}_k^- + K(\underbrace{z_k - \hat{z}_k}_\textrm{$y_k$})%
 \end{equation}
 
-Additionally, the covariance matrix needs to be updated to account for the correction (equation \ref{eq:ekf-cov-correction}). The covariance is reduced based on the Kalman gain, signifying how the certainty in our estimate has increased by the correction.
+Additionally, the covariance matrix needs to be updated to account for the correction (equation \ref{eq:ekf-cov-correction}, $I$ being the identity matrix). The covariance is reduced based on the Kalman gain, signifying how the certainty in our estimate has increased by the correction.
 \begin{equation}\label{eq:ekf-cov-correction}%
 P_k^+ = (I - K H_k)P_k^-%
 \end{equation}
@@ -66,7 +66,8 @@ While the \gls{ekf} has been successfully applied to problems for a long time, i
 \end{itemize}
 Therefore, alternatives to the \gls{ekf} have been developed. A promising algorithm is the \gls{ukf}~\cite{SimonJ.Julier.1997}.
 
-At the core of the \gls{ukf}'s improvement relies on the \gls{ut}. This transformation is a method to approximate the properties of a statistical distribution undergoing a non-linear transformation.
+At its core, the \gls{ukf}'s improvement relies on the \gls{ut}. This transformation is a method to approximate the properties of a statistical distribution undergoing a non-linear transformation. A small set of points ($2n+1$ for an $n$-dimensional random variable) is sampled from the distribution using a specific, deterministic algorithm (not randomly as in Monte Carlo algorithms). These points contain second-order information about the distribution and can be transformed to capture properties such as mean and variance of the resulting distribution. Therefore, the mean is calculated to a higher order of accuracy than in an \gls{ekf}, whereas the covariance is calculated to the same order of accuracy. Through the \gls{ut}, linearization of the Jacobian is rendered unnecessary, which aids the filter's numerical stability in non-linear systems and enables application in discontinuous systems. Furthermore, no manual derivation of the Jacobian is necessary. Still, the efficiency and accuracy is equal or better than the \gls{ekf}.
 
-Through the use of the \gls{ut}, linearization of the Jacobian is rendered unnecessary, which aids the filter's stability in non-linear systems. Furthermore, no manual derivation of derivatives is necessary. Still, the performance is equal or better than the \gls{ekf}.
-% TODO disadvantages
+The \gls{ukf} leverages the \gls{ut} to adjust the estimate and covariance in both the prediction and correction step. While the general structure of the Kalman filter including prediction and correction remains, the sigma points are now used in every step.
+
+The \gls{ukf} has been shown to outperform the \gls{ekf} in terms of accuracy in a large number of applications. While it too struggles with second-order moments, only the second-order \gls{ekf}~\cite{M.Roth.2011} can match its accuracy, but is more computationally complex~\cite{Gustafsson.2012}. Therefore, the \gls{ekf}'s popularity over the objectively better \gls{ukf} can probably attributed to its long existence.

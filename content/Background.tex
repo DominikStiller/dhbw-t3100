@@ -2,25 +2,11 @@ The state estimation of a vehicle sits at the junction of vehicle dynamics and c
 
 Throughout this thesis, the conventions of ISO 8855~\cite{ISO.2011} will be used, which assumes a right-handed coordinate system. The vehicle coordinate system uses an upward $z$-axis with a forward $x$-axis and a leftward $y$-axis, while the earth-fixed coordinate system uses an upward $z$-axis with an eastward $x$-axis and a northward $y$-axis. The vehicle's\gls{cog} is used as origin/reference point of the vehicle coordinate system. In case of mixed coordinate systems, left-superscript will be used to denote the reference frame (e.g., $\prescript{V}{}{x}$ for vehicle coordinates, $\prescript{E}{}{x}$ for earth-fixed coordinates).
 
-
 \section{Rigid Body Kinematics}
 \input{content/Background_RigidBodyKinematics}
-
 
 \section{Estimation Algorithms}
 \input{content/Background_EstimationAlgorithms}
 
-
 \section{Failure Detection}
-causes: missing connection, no feature correlation for sfii, electromagnetic interference
-
-outlier types: persistent, transient~\cite[p.~170~ff.]{Himmelblau.1994}
-outlier, drift, null~\cite[p.~19 f.]{Kabzan.13.05.2019}
-transient is easier to detect
-separate mechanisms
-
-statistical methods
-
-transient: range and
-
-EKF bank
+\input{content/Background_FailureDetection}
