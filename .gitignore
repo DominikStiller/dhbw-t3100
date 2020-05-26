@@ -267,3 +267,4 @@ TSWLatexianTemp*
 *.sta
 
 references/RecycleBin/
+.ipynb_checkpoints/
