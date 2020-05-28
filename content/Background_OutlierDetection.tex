@@ -4,22 +4,50 @@ The quality of the estimate produces by the estimation algorithm is limited by t
 \subsection{Outlier Types}
 Outliers can be the result of a variety of issues. For example, heavy vibration and shocks might cause acceleration spikes and an optical cross-correlation sensor might see a featureless surface, so the recognized velocity drops to zero. In cabled transmission, a physical connection might be defect, while in radio transmission, the signal might drop out temporarily or there might be electromagnetic interference. Possible causes can vary a lot between environments, but a highly dynamic environment with many mechanical and electric parts such as an electric race car is likely to produce outliers at some point.
 
-% TODO generate 4 plots and create subfigures
-Outliers can be classified in three broad categories~\cites[p.~19]{Kabzan.2019}[p.~165~ff.]{Himmelblau.1994}:
+Outliers can be classified in four broad categories~\cites[p.~19]{Kabzan.2019}[p.~165~ff.]{Himmelblau.1994}, shown in figure~\ref{fig:outlier-types}:
 \begin{itemize}
 \item Spike/intermittent noise: a transient deviation from previous samples
 \item Level shift: a transient deviation of the mean value
 \item Drift/spurious trends: a slow variation of the mean value over time
 \item Null/signal dropout: not receiving input or zero
 \end{itemize}
-Drift often occurs as the result of integrating a biased signal, e.g., caused by low frequency noise or temperature changes. While there are other cases of poor data quality such as clipping and excessive noise, they rather stem from calibration problems and hardware errors, so they are not regarded further.
+Drift often occurs as the result of integrating a biased signal, e.g., caused by low frequency noise or temperature changes. The true mean does not change, but the accumulating error results in an observed trending mean. While there are other cases of poor data quality such as clipping and excessive noise, they rather stem from calibration problems and hardware errors, so they are not regarded further.
 
-Outliers can be temporary or persistent. While spikes are inherently temporary, outliers of the other three categories might or might not return to normal. For example, a \gls{gps} signal can drop out because the sensor has no satellite connectivity for a couple of seconds but then recovers, while another sensor can be permanently damaged and will not recover. Persistent but not transient outliers are hard to detect, and especially spurious trends cannot easily be distinguished from real trends by their nature. This motivates the need for two separate methods, an approach that is also employed by~\cite{Kabzan.2019}:
+\begin{figure}[h]
+	\begin{subfigure}[c]{0.5\textwidth}
+		\centering
+		\includegraphics[width=0.95\textwidth]{plot_outlier_spike}%
+		\subcaption{Spike}
+		\label{fig:offcenter-spike}
+	\end{subfigure}
+	\begin{subfigure}[c]{0.5\textwidth}
+		\centering
+		\includegraphics[width=0.95\textwidth]{plot_outlier_levelshift}%
+		\subcaption{Level shift}
+		\label{fig:outlier-type-levelshift}
+	\end{subfigure}
+	\begin{subfigure}[c]{0.5\textwidth}
+		\centering
+		\includegraphics[width=0.95\textwidth]{plot_outlier_drift}%
+		\subcaption{Drift}
+		\label{fig:outlier-type-drift}
+	\end{subfigure}
+	\begin{subfigure}[c]{0.5\textwidth}
+		\centering
+		\includegraphics[width=0.95\textwidth]{plot_outlier_null}%
+		\subcaption{Null}
+		\label{fig:outlier-type-null}
+	\end{subfigure}
+	\caption{Outlier types}
+	\label{fig:outlier-types}
+\end{figure}
+
+Outliers can be temporary or persistent. While spikes are inherently temporary, outliers of the other three categories might or might not return to normal. For example, a \gls{gps} signal can drop out because the sensor has no satellite connectivity for a couple of seconds but then recovers (as in figure \ref{fig:outlier-type-null}), while another sensor can be permanently damaged and will not recover (as in figure \ref{fig:outlier-type-levelshift}). Persistent but not transient outliers are hard to detect, and especially spurious trends cannot easily be distinguished from real trends by their nature. This motivates the need for two separate methods, an approach that is also employed by~\cite{Kabzan.2019}:
 \begin{itemize}
 \item A simple but strict method for transient outliers
 \item A complex but lenient method for persistent outliers
 \end{itemize}
-With this dual approach false negatives for easy-to-detect transient outliers can be minimized while false positives for hard-to-discern persistent outliers can be avoided.
+With this dual approach, false negatives for easy-to-detect transient outliers can be minimized while false positives for hard-to-discern persistent outliers can be avoided. Note that the choice of detection thresholds influences the strictness and therefore sensitivity to a high degree.
 
 
 \subsection{Rudimentary Methods}
@@ -37,7 +65,7 @@ Performing a sanity check is a good first approach to detect gross outliers. How
 
 
 \subsection{Statistical Methods}
-Methods based on the statistical properties of a signal can provide more granular checks than the previous rudimentary methods. One of the simplest robust statistics is the median, i.e. the center value when sorting a list of values, which is used in the method shown in equation \ref{eq:outlier-median}~\cite[p.~142]{Basu.2007}. An expected value $\tilde{z}_t$ is calculated using both the median of the last $k$ samples and the median of the differences of the last $k+1$ samples. If the difference between the expected and the actual value exceeds the threshold, the current sample is marked as outlier.
+Methods based on the statistical properties of a signal can provide more granular checks than the previous rudimentary methods. One of the simplest robust statistics is the median, i.e. the center value when sorting a list of values, which is used in the method shown in equation \ref{eq:outlier-median}~\cite[p.~142]{Basu.2007}. An expected value $\tilde{z}_t$ is calculated using both the median of the last $k$ samples and the median of the differences of the last $k+1$ samples. If the difference between the expected and the actual value exceeds the threshold, the current sample is marked as outlier. The window size $k$ influences the robustness but also the detection delay, and should therefore be chosen carefully. Note that, once the outlier persists for more than $k$ samples, following measurements will be regarded as valid.
 \begin{equation}\label{eq:outlier-median}%
 \abs*{z_t - \underbrace{median(z_{t-k}, \ldots, z_{t-1}) + k \cdot median(z_{t-k} - z_{t-k-1}, \ldots, z_{t-1} - z_{t-2})}_\textrm{$\tilde{z}_t$}} < \tau%
 \end{equation}
@@ -56,7 +84,7 @@ Drift detection becomes easier when multiple sensors measure the same variable a
 \sum_{i=1}^n (z_i - \mu_z)^2 < \tau%
 \end{equation}
 
-The last approach we will regard in this chapter can be used for spike and drift detection, but requires $n>2$ sensors for a variable like the previous method. Multiple instances of the same \gls{ekf}, collectively called a bank of $n$ \gls{ekf}s, are executed in parallel. However, in the $i$-th filter, the measurement of the $i$-th sensor is disabled. In the event that an outlier in the $i$-th measurement occurs, all filters except the one that does not incorporate the faulty measurement will show a very high residual. \\ Equation \ref{eq:outlier-ekfbank}~\cite[p.~3]{Kobayashi.2003} shows how the sum of squared residuals $\textit{NSSR}^i$, normalized by the diagonal measurement covariance matrix $R^i$, is calculated from the residual $y_i$ of the $i$-th filter. The NSSR combines all elements of the residual vector into a single metric, enabling easy comparison with a threshold $\tau_i$. This threshold can be chosen empirically, or based on a desired statistical significance of the resulting $\chi^2$ distribution~\cite[p.~3]{Xue.2007}. Note that a more sophisticated approach to fault isolation, i.e. locating the sensor producing outliers, is required for the \gls{ekf} bank to work with multiple simultaneous outliers.
+The last approach we will regard in this chapter can be used for spike and drift detection, but requires $n>2$ sensors for a variable like the previous method. Multiple instances of the same \gls{ekf}, collectively called a bank of $n$ \gls{ekf}s, are executed in parallel. However, in the $i$-th filter, the measurement of the $i$-th sensor is disabled. In the event that an outlier in the $i$-th measurement occurs, all filters except the one that does not incorporate the faulty measurement will show a very high residual. \\ Equation \ref{eq:outlier-ekfbank}~\cite[p.~3]{Kobayashi.2003} shows how the sum of squared residuals\footnote{While the original paper talk about a \textit{weighted} sum of squared residuals, we omitted the weight coefficient in favor of an adjustable threshold.} $\textit{NSSR}^i$, normalized by the diagonal measurement covariance matrix $R^i$, is calculated from the residual $y_i$ of the $i$-th filter. The NSSR combines all elements of the residual vector into a single metric, enabling easy comparison with a threshold $\tau_i$. This threshold can be chosen empirically, or based on a desired statistical significance of the resulting $\chi^2$ distribution~\cite[p.~3]{Xue.2007}. Note that a more sophisticated approach to fault isolation, i.e. locating the sensor producing outliers, is required for the \gls{ekf} bank to work with multiple simultaneous outliers.
 \begin{subequations}\label{eq:outlier-ekfbank}
 \begin{alignat}{2}%
 y^i &= z^i - h^i(\hat{x}^-) \\%

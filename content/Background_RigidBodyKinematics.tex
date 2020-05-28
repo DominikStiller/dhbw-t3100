@@ -92,7 +92,7 @@ In two dimensions, this becomes easier to understand. Calculation of the yaw acc
 \begin{equation}\label{eq:angacc-from-linacc-2d}%
 \alpha%
 = \frac{\begin{bmatrix}\Delta r_x \\ \Delta r_y \\ 0\end{bmatrix} \times \left(\begin{bmatrix}\Delta a_x \\ \Delta a_y \\ 0\end{bmatrix} - \begin{bmatrix}-\dot{\psi}^2 \cdot r_x \\ -\dot{\psi}^2 \cdot r_y \\ 0\end{bmatrix}\right)}{\begin{Vmatrix}\Delta r_x \\ \Delta r_y \\ 0\end{Vmatrix}^2}%
-\implies =\ddot{\psi} = \frac{\Delta r_x\Delta a_y - \Delta r_y\Delta a_x}{\Delta r_x^2 + \Delta r_y^2}%
+\implies \ddot{\psi} = \frac{\Delta r_x\Delta a_y - \Delta r_y\Delta a_x}{\Delta r_x^2 + \Delta r_y^2}%
 \end{equation}
 
 
@@ -107,8 +107,8 @@ Most sensor measurements are done in the vehicle coordinate system. Others, such
 \end{equation}
 
 
-\subsection{Components of Vehicle Acceleration}
-The motion of a rigid body in the earth-fixed reference frame can be understood as a composition of a rotation and a translation, in our case with the \gls{cog} as center of rotation. In vehicles, this rotation results from cornering.  The acceleration as experienced in the \gls{cog} is the result of the direct linear acceleration and the centripetal force resulting from the rotation, as shown in equation \ref{eq:cornering-acceleration}~\cite[p.~146]{Milliken.1996}. Other than in equation \ref{eq:offcenter-acceleration-3d}, the radius $R$ is not the distance to the \gls{cog} but the corner/curve radius. Since $R$ is usually not known, we can get rid of it using $R = v_{\perp} / \dot{\psi}$ with the tangential velocity $v_{\perp}$.
+\subsection{Cornering Acceleration}
+The motion of a rigid body in the earth-fixed reference frame can be understood as a composition of a rotation and a translation, in our case with the \gls{cog} as center of rotation. In vehicles, this rotation results from cornering. The acceleration as experienced in the \gls{cog} is the result of the direct linear acceleration and the centripetal force resulting from the rotation, as shown in equation \ref{eq:cornering-acceleration}~\cite[p.~146]{Milliken.1996}. Other than in equation \ref{eq:offcenter-acceleration-3d}, the radius $R$ is not the distance to the \gls{cog} but the corner/curve radius. When driving straight, the radius approaches infinity and the centripetal force vanishes. Since $R$ is usually not known, we can get rid of it using $R = v_{\perp} / \dot{\psi}$ with the tangential velocity $v_{\perp}$.
 
 \begin{subequations}\label{eq:cornering-acceleration}
 \begin{alignat}{3}%
