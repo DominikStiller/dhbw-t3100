@@ -21,6 +21,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{geometry}
 \usepackage{textcomp}
+\usepackage{pifont}
 \usepackage{siunitx}
 \usepackage{setspace}
 \usepackage{array}
@@ -77,7 +78,7 @@
 \addbibresource{./misc/references.bib}
 
 % Microtype
-% http://www.khirevich.com/latex/micrsotype/
+% http://www.khirevich.com/latex/microtype/
 \SetProtrusion{encoding={*},family={bch},series={*},size={6,7}}
 			     {1={ ,750},2={ ,500},3={ ,500},4={ ,500},5={ ,500},
 	             6={ ,500},7={ ,600},8={ ,500},9={ ,500},0={ ,500}}
@@ -136,6 +137,9 @@
 
 % Enable ligatures in pdf figures
 \pdfinclusioncopyfonts=1
+
+% pifont
+\newcommand{\xmark}{\ding{53}}%
 
 
 %----------------------------------------------------------------------------

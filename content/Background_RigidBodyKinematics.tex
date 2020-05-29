@@ -4,7 +4,8 @@ The fundamental laws of mechanics apply to race cars as they do to any other bod
 \begin{alignat}{2}%
 p &= \begin{bmatrix}x, y, z\end{bmatrix}^T \\%
 v &= \begin{bmatrix}v_x, v_y, v_z\end{bmatrix}^T \\%
-a &= \begin{bmatrix}a_x, a_y, a_z\end{bmatrix}^T%
+a &= \begin{bmatrix}a_x, a_y, a_z\end{bmatrix}^T \\%
+\beta &= \arctan\left(\frac{v_x}{v_y}\right) \approx \frac{v_y}{v_x}%
 \end{alignat}
 \end{subequations}
 \begin{subequations}\label{eq:angular-quantities}
@@ -15,7 +16,9 @@ a &= \begin{bmatrix}a_x, a_y, a_z\end{bmatrix}^T%
 \end{alignat}
 \end{subequations}
 
-The linear displacement $p$ of a body describes its position relative to the origin of its reference frame. It comprises a longitudinal component along the $x$-axis, a lateral component along the $y$-axis and a vertical component along the $z$-axis. Its first time derivative $v = \frac{dr}{dt}$ and second time derivative $a = \frac{d^2r}{dt^2}$ are the body's linear velocity and acceleration, respectively. \\ The angular orientation $\varphi$ of a body describes its rotation in the reference frame. It can be described by the roll angle $\phi$ around the $x$-axis, the pitch angle $\theta$ around the $y$-axis and the yaw angle, or heading, $\psi$ around the $z$-axis. The angular velocity $\omega$ and acceleration $\alpha$ describe the element-wise time derivatives of these angles. Talking about $p$ and $\varphi$ only makes sense in earth-fixed coordinates.
+The linear displacement $p$ of a body describes its position relative to the origin of its reference frame. It comprises a longitudinal component along the $x$-axis, a lateral component along the $y$-axis and a vertical component along the $z$-axis. Its first time derivative $v = \frac{dr}{dt}$ and second time derivative $a = \frac{d^2r}{dt^2}$ are the body's linear velocity and acceleration, respectively. In vehicles, the arctangent of the ratio of lateral and longitudinal velocities, often approximated as just the ratio, is furthermore denoted the \textit{vehicle sideslip angle} $\beta$.
+
+The angular orientation $\varphi$ of a body describes its rotation in the reference frame. It can be described by the roll angle $\phi$ around the $x$-axis, the pitch angle $\theta$ around the $y$-axis and the yaw angle, or heading, $\psi$ around the $z$-axis. The angular velocity $\omega$ and acceleration $\alpha$ describe the element-wise time derivatives of these angles. Talking about $p$ and $\varphi$ only makes sense in earth-fixed coordinates.
 
 
 \subsection{Transformation of Linear Velocities}

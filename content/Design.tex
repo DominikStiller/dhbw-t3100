@@ -1,23 +1,7 @@
-state estimation to be designed will be deployed in two cars
-non-autonomous EV, newly built -> sensors can be chosen
-partly autonomous DV, reuse old car with camera/lidar -> fixed set of sensors
+In this chapter, we will look at the design of the state estimation and the vehicle platform it will be deployed to. The state estimation is built from the ground up, so there is a lot of flexibility regarding the design choices. The design is deliberately described in terms of generic components, enabling adoption on other platforms and software environments.
 
-\section{Vehicle Characteristics}
-car is equipped with a plethora of sensors, but only some are important to us
-e.g., sensors for brake pressure or accelerator pedal actuation not relevant
-top down view of car with sensor positions
-table: sensor name, sensor type, measured variables, columns EV and dv with X
-refer to characterization in TC paper
-sfii is key sensor for velocity estimation because it is slip free as opposed to wheels and fast as opposed to GPS
- (compare velocity with only gps, sfii and whee)
-
-ES910 as ECU, can be programmed in Matlab/Simulink, C, ASCET-MD~\cite[p.~17]{ETASGmbHStuttgart.2018}
-runs \gls{vdc} with TC, TV, motor request...
-The VDC is a tool that helps the driver to exploit the maximum physical potential of the vehicle.
-state estimation will be part of \gls{vdc}
-In DV vehicle, DV software runs on a separate computer that needs part of state as well
-inputs from sensor via CAN at different frequencies to avoid congestion
-it is unclear whether sfii will be in DV
+\section{Vehicle Platform}
+\input{content/Design_VehiclePlatform}
 
 \section{Requirements}
 goal: provide robust, accurate estimate of vehicle state for \gls{vdc} and DV software 
@@ -68,6 +52,7 @@ IMU fusion
 very important because used extensively in EKF and other parts of VDC like TC and TV (especially dpsi)
 fast response
 contains outlier detection because available sensors need to be known before fusion in preprocessing
+handle arbitrary number and position
 
 GPS WGS84 coordinates transformed to track with first known point as origin
 
@@ -91,7 +76,8 @@ Show input selection and state equations, jacobians
 euler forward discretization
 GPS is not included because it is not beneficial due to its slow response
 kinematic model from~\cite[p.~156]{AlexanderWischnewski.2019}
-
+reduces effects of noise
+no heading measurements in ev, especially lack of initial heading is bad
 
 prediction using differential equation
 initialization
