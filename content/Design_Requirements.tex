@@ -1,0 +1,29 @@
+The goal of the state estimation is to provide a robust and accurate estimate of the vehicle state. This estimate will be used by the performance components of the \gls{vdc} and the \gls{dv} software, which therefore dictate the required state variables, which are listed in table \ref{tab:state-variables}. All quantities refer to the \gls{cog}, which is regarded as center of the vehicle. However, all angular variables are valid for every point on the vehicle because it is assumed to be a rigid body. The position is defined relative to a reference point, but can easily be translated. Note that the vehicle state is only defined in the plane of two dimensions, since no three-dimensional state is required by subsequent components and vertical dynamics are negligible.
+
+\begin{table}
+	\newcommand\heading[1]{\textcolor{white}{\textbf{#1}}}
+	\renewcommand{\arraystretch}{1.2}
+	\sffamily
+	\centering
+	\begin{tabularx}{\textwidth}{l l l X}
+	\rowcolor{black} \heading{Variable~~~~~~~~~~~~~~~~~~~~~} & \heading{Symbol~~~~~~~} & \heading{Unit~~~~~~~~~} & \heading{Coordinate system} \vspace{2pt} \\
+	Position & $x, y$ & \si{\meter} & earth-fixed \\
+	Heading & $\psi$ & \si{\radian} & earth-fixed \\
+	Linear velocity & $v_x, v_y$ & \si{\meter\per\second} & vehicle \\
+	Linear acceleration & $a_x, a_y$ & \si{\meter\per\square\second} & vehicle \\
+	Yaw velocity & $\dot{\psi}$ & \si{\radian\per\second} & -- \\
+	Yaw acceleration & $\ddot{\psi}$ & \si{\radian\per\square\second} & -- \\
+	\end{tabularx}
+	\caption{State variables to be estimated}
+	\label{tab:state-variables}
+\end{table}
+
+Given its goal and environment, several requirements must be fulfilled by our state estimation design:
+\begin{enumerate}
+\item Accurate estimation of vehicle state: the best possible estimate of the vehicle state given the current measurements and physical knowledge is required for maximal performance
+\item Support for flexible sensors: both the \gls{ev} and \gls{dv} sensor setups must be supported, in the best case the state estimation should handle an arbitrary setup
+\item Robustness towards outliers and failures: outliers and sensor failures may occur at any time and should not have an adverse effect on the estimation, which requires detection and appropriate handling
+\item Support for variable sampling rates: measurements arriving at different rates must be supported, as mentioned in the previous section
+\end{enumerate}
+
+Additionally, our philosophy for the design and architecture is a preference for simplicity, according to Occam's razor (\enquote{the simplest solution is most likely the right one}). This is especially true if two methods work equally well but one is simpler. Only if simple methods do not yield the desired result, try more complex and complicated approaches. This philosophy has numerous benefit. A simple solution is one that makes less assumptions, and therefore generalizes better. It is also easier to understand, reason about and troubleshoot. This is of special significance for the application of the state estimation in a Formula Student team, where members and component maintainers change yearly and cannot dive deep into every topic. We apply this philosophy to small components but also to the high-level architecture, which facilitates maintenance and extension.
