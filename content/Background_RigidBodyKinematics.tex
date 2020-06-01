@@ -2,7 +2,7 @@ The fundamental laws of mechanics apply to race cars as they do to any other bod
 
 \begin{subequations}\label{eq:linear-quantities}
 \begin{alignat}{2}%
-p &= \begin{bmatrix}x, y, z\end{bmatrix}^T \\%
+p &= \begin{bmatrix}p_x, p_y, p_z\end{bmatrix}^T \\%
 v &= \begin{bmatrix}v_x, v_y, v_z\end{bmatrix}^T \\%
 a &= \begin{bmatrix}a_x, a_y, a_z\end{bmatrix}^T \\%
 \beta &= \arctan\left(\frac{v_x}{v_y}\right) \approx \frac{v_y}{v_x}%
@@ -22,7 +22,7 @@ The angular orientation $\varphi$ of a body describes its rotation in the refere
 
 
 \subsection{Transformation of Linear Velocities}
-All points on a rigid body experience the same angular velocity, i.e. $\omega^A = \omega^B$ for any two points $A, B$ on that body at all times. However, these two points will generally not have the same linear velocity vector, since it is affected by their location $r$ relative to the \gls{cog}. Only when $\omega = \mathbb{0}$, the linear velocity is equal for all points on the body, i.e. $v^A = v^B$. If there is a non-zero angular velocity, equation \ref{eq:offcenter-velocity-3d} holds for any point $P$, assuming the velocity at the \gls{cog} is known (the expanded form can be found in Appendix \ref{sec:appendix-transformation-linvel}).
+All points on a rigid body experience the same angular velocity, i.e. $\omega^A = \omega^B$ for any two points $A, B$ on that body at all times. However, these two points will generally not have the same linear velocity vector, since it is affected by their location $r$ relative to the \gls{cog}. Only when $\omega = \mathbb{0}$, the linear velocity is equal for all points on the body, i.e. $v^A = v^B$. If there is a non-zero angular velocity, equation \ref{eq:offcenter-velocity-3d} holds for any point $P$, assuming the velocity at the \gls{cog} is known (the expanded form can be found in appendix \ref{sec:appendix-transformation-linvel}).
 
 % For SFII transformation
 \begin{equation}\label{eq:offcenter-velocity-3d}%
@@ -48,7 +48,7 @@ Let us regard the example scenario shown in figure \ref{fig:offcenter-velocity},
 
 
 \subsection{Transformation of Linear Accelerations}
-Like the angular velocity, the angular acceleration is the same at every point on a rigid body, i.e. $\alpha^A = \alpha^B$ for any two points $A, B$ on that body. However, these two points will generally not experience the same linear acceleration. Only if the rotational motion components $\omega$ and $\alpha$ are $\mathbb{0}$, the linear acceleration is equal for all points on the body, i.e. $a^A = a^B$. In the general case, equation \ref{eq:offcenter-acceleration-3d}~\cite[p.~140]{Gross.2014} holds for any point $P$ at location $r$ (the expanded form can be found in Appendix \ref{sec:appendix-transformation-linacc}).
+Like the angular velocity, the angular acceleration is the same at every point on a rigid body, i.e. $\alpha^A = \alpha^B$ for any two points $A, B$ on that body. However, these two points will generally not experience the same linear acceleration. Only if the rotational motion components $\omega$ and $\alpha$ are $\mathbb{0}$, the linear acceleration is equal for all points on the body, i.e. $a^A = a^B$. In the general case, equation \ref{eq:offcenter-acceleration-3d}~\cite[p.~140]{Gross.2014} holds for any point $P$ at location $r$ (the expanded form can be found in appendix \ref{sec:appendix-transformation-linacc}).
 
 \begin{equation}\label{eq:offcenter-acceleration-3d}%
 a^P = a^{CG} + \alpha \times r^P + \omega \times (\omega \times r^P)%
@@ -99,7 +99,7 @@ In two dimensions, this becomes easier to understand. Calculation of the yaw acc
 \end{equation}
 
 
-\subsection{Transformation of Velocity Between Coordinate Systems}
+\subsection{Transformation of Velocity Between Coordinate Systems}\label{sec:background-transform-linvelocity}
 Most sensor measurements are done in the vehicle coordinate system. Others, such as position measurements from a \gls{gnss} (e.g., \gls{gps}, Galileo, GLONASS), will be made in earth-fixed coordinates, however. To relate these, we need to be able to transform the vehicle velocity from the vehicle coordinate system to the earth-fixed coordinate system, which has an inertial (i.e. non-accelerating) reference frame. Equation \ref{eq:transform-linear-velocity} shows, how this can be achieved by a simple rotation using the heading $\psi$. A two-dimensional treatment is sufficient, since \gls{gnss} altitude information are not relevant here. The transformation extracts the east-/northward components of the local velocities and adds them.
 
 % For EKF position--velocity
@@ -110,7 +110,7 @@ Most sensor measurements are done in the vehicle coordinate system. Others, such
 \end{equation}
 
 
-\subsection{Cornering Acceleration}
+\subsection{Cornering Acceleration}\label{sec:background-cornering-acceleration}
 The motion of a rigid body in the earth-fixed reference frame can be understood as a composition of a rotation and a translation, in our case with the \gls{cog} as center of rotation. In vehicles, this rotation results from cornering. The acceleration as experienced in the \gls{cog} is the result of the direct linear acceleration and the centripetal force resulting from the rotation, as shown in equation \ref{eq:cornering-acceleration}~\cite[p.~146]{Milliken.1996}. Other than in equation \ref{eq:offcenter-acceleration-3d}, the radius $R$ is not the distance to the \gls{cog} but the corner/curve radius. When driving straight, the radius approaches infinity and the centripetal force vanishes. Since $R$ is usually not known, we can get rid of it using $R = v_{\perp} / \dot{\psi}$ with the tangential velocity $v_{\perp}$.
 
 \begin{subequations}\label{eq:cornering-acceleration}

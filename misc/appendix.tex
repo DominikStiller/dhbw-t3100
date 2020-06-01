@@ -1,6 +1,3 @@
-\chapter{Bus Definitions}
-Bus definitions
-
 \chapter{Expanded Rigid Body Equations}
 \section{Transformation of Linear Velocity}\label{sec:appendix-transformation-linvel}
 \begin{align*}%
@@ -24,3 +21,43 @@ Bus definitions
 +\begin{bmatrix}\ddot{\theta}r_z - \ddot{\psi}r_y \\\ddot{\psi}r_x - \ddot{\phi}r_z \\\ddot{\phi}r_y - \ddot{\theta}r_x\end{bmatrix}%
 +\begin{bmatrix}\dot{\theta}(\dot{\phi}r_y - \dot{\theta}r_x) - \dot{\psi}(\dot{\psi}r_x - \dot{\phi}r_z)\\\dot{\psi}(\dot{\theta}r_z - \dot{\psi}r_y) - \dot{\phi}(\dot{\phi}r_y - \dot{\theta}r_x)\\\dot{\phi}(\dot{\psi}r_x - \dot{\phi}r_z) - \dot{\theta}(\dot{\theta}r_z - \dot{\psi}r_y)\end{bmatrix}%
 \end{align*}
+
+\chapter{Extended Kalman Filter Equations}\label{sec:appendix-ekf-equations}
+
+\section{Jacobian of Process Function With Respect to State Vector}
+\begin{equation*}%
+\frac{\partial \dot{x}}{\partial x} = \begin{bmatrix}%
+0 & 0 & cos(\psi) & -sin(\psi) & -v_x \cdot sin(\psi) - v_y \cdot cos(\psi) & 0 \\%
+0 & 0 & sin(\psi) & cos(\psi) & v_x \cdot cos(\psi) - v_y \cdot sin(\psi) & 0 \\%
+0 & 0 & 0 & \dot{\psi} & 0 & v_y \\%
+0 & 0 & -\dot{\psi} & 0 & 0 & -v_x \\%
+0 & 0 & 0 & 0 & 0 & 1 \\%
+0 & 0 & 0 & 0 & 0 & 0%
+\end{bmatrix}%
+\end{equation*}
+
+\section{Jacobian of Process Function With Respect to Input Vector}
+\begin{equation*}%
+\frac{\partial \dot{x}}{\partial u} = \begin{bmatrix}%
+0 & 0 & 0 \\%
+0 & 0 & 0 \\%
+1 & 0 & 0 \\%
+0 & 1 & 0 \\%
+0 & 0 & 0 \\%
+0 & 0 & 1%
+\end{bmatrix}%
+\end{equation*}
+
+\section{Measurement Matrix}\label{sec:appendix-ekf-measurement}
+\begin{equation*}%
+H = \begin{bmatrix}%
+1 & 0 & 0 & 0 & 0 & 0 \\%
+0 & 1 & 0 & 0 & 0 & 0 \\%
+0 & 0 & 1 & 0 & 0 & 0 \\%
+0 & 0 & 0 & 1 & 0 & 0 \\%
+0 & 0 & 1 & 0 & 0 & 0 \\%
+0 & 0 & 1 & 0 & 0 & 0 \\%
+0 & 0 & 0 & 0 & 1 & 0 \\%
+0 & 0 & 0 & 0 & 0 & 1%
+\end{bmatrix}%
+\end{equation*}

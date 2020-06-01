@@ -17,9 +17,9 @@ The vehicles are equipped with a plethora of sensors, which can be used for stat
 	\rowcolor{black} \heading{Sensor type} & \heading{Measured variables~~~} & \heading{~EV~} & \heading{~DV~} \vspace{2pt} \\
 	\Glsdesc{imu} with gyrometer & $a, \omega$ & \xmark & \xmark \\
 	Optical cross-correlation velocity sensor & $v, \beta$ & \xmark &  \\
-	Motor speed sensor & $\omega_{motor}$ & \xmark & \xmark \\
 	\Glsdesc{gnss} & $p, \norm{v}$ & \xmark & \xmark \\
 	\Glsdesc{gnss} & $\psi$ &  & \xmark \\
+	Motor speed sensor & $\omega_{motor}$ & \xmark & \xmark
 	\end{tabularx}
 	\caption{Sensor setups for \gls{ev} and \gls{dv}}
 	\label{tab:sensor}
@@ -37,9 +37,9 @@ The vehicles are equipped with a plethora of sensors, which can be used for stat
 
 \item[Optical velocity sensor] The optical cross-correlation velocity sensor, only available in the \gls{ev}, provides longitudinal and lateral speed measurements, and therefore also measurements of the vehicle sideslip angle. It enables slip-free velocity measurements by correlating photosensor information of the surface over time, which uniquely determines the speed and direction of movement~\cite{Bellof.4241993}. The fact that it is not influenced by slip, as velocity measurements from wheel speeds are, makes it a very valuable addition to the sensor setup. However, it is noisy and prone to temporary spikes and even failures on feature-less surfaces (see dark red line in figure \ref{fig:velocities} at \SI{5.2}{\second}).
 
-\item[Motor speed sensor] The rotary encoders in each of the four motors give individual rotation speed measurements for the four wheels. They are available in both vehicles and are assumed to be reliable, since the vehicle will not drive when they fail. However, when using them to calculate the vehicle velocity, deviations due to slip occur in highly dynamic situations (see light grey line in figure \ref{fig:velocities} at \SI{3.8}{\second})
-
 \item[GNSS] A \gls{gnss} receiver is mounted in the front of both vehicles. Next to position measurements, they provide another source of speed information. The position accuracy is high in the range of a few centimeters. However, they are slow to react, with over \SI{100}{\milli\second} of delay in some situations~\cite[p.~27]{Biel.2019} (see dark grey line in figure \ref{fig:velocities}). The receiver mounted in the \gls{dv} additionally provides heading information, made possible by the relative position of two separated antennas mounted in the front and rear. This enables transformation of the speed into a velocity vector.
+
+\item[Motor speed sensor] The rotary encoders in each of the four motors give individual rotation speed measurements for the four wheels. They are available in both vehicles and are assumed to be reliable, since the vehicle will not drive when they fail. However, when using them to calculate the vehicle velocity, deviations due to slip occur in highly dynamic situations (see light grey line in figure \ref{fig:velocities} at \SI{3.8}{\second})
 \end{description}
 
 \begin{figure}
@@ -58,7 +58,7 @@ To summarize, the key differences between the \gls{ev} and \gls{dv} are as follo
 The lack of the optical velocity sensor in the \gls{dv} is inconvenient but not fatal, since the state estimation can compensate it. For track and obstacle recognition, the autonomous \gls{dv} is furthermore equipped with stereo cameras and lidar sensors. These could be used for optical flow computations to gain more position, attitude and velocity information, but for this design, we rely solely on the sensors described in the previous paragraphs. The estimated state is, however, used to correct lidar measurements.
 
 
-\subsection{Computation System}
+\subsection{Computation System}\ref{sec:design-computation-system}
 All sensor and control signals converge at the central \gls{ecu}. The software running on that \gls{ecu} is called \gls{vdc} and has several important tasks:
 \begin{itemize}
 \item Receive driver input from steering wheel and pedals
