@@ -6,6 +6,7 @@ bad position in EV without heading measurements, because velocity cannot be used
 compare raw measurements with velocity estimate
 show results for each state variable
 effect of different debouncing times and thresholds
+show velocity without kistler to simulate dv
 
 compare max change rate and mean based
 
@@ -13,8 +14,10 @@ max likelihood IMU fusion not better for omega and a, but less noise for alpha w
 use mean based fusion because occams razor
 
 show all wssrs for ekf bank
-maybe compare with other outlier detection approaches
+compare with median outlier detection approaches
 
 
 Discussion, impact of results on esleek
 prepare for DV
+
+only testing can show if outlier detection works, if not maybe try chi-squared test and variance test

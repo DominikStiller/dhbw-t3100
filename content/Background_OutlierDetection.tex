@@ -1,7 +1,7 @@
 The quality of the estimate produces by the estimation algorithm is limited by the quality of its input data, especially if the algorithm is not robust. In practice, sensor data can contain anomalous sensor samples, also called \textit{outliers}. While these samples might actually reflect reality, they usually stem from errors during measurement or transmission. In this section, the term \textit{outlier} will refer to bad samples that should be discarded, not surprising but correct samples which can occur in random processes. The challenge is to discern these two while minimizing the number of false positives (leads to discarding good measurements) and false negatives (degrades estimate quality). This improves estimation quality and can be crucial in safety-critical applications. This section presents common outlier types and methods to detect them.
 
 
-\subsection{Outlier Types}
+\subsection{Outlier Types}\label{sec:outlier-types}
 Outliers can be the result of a variety of issues. For example, heavy vibration and shocks might cause acceleration spikes and an optical cross-correlation sensor might see a featureless surface, so the recognized velocity drops to zero. In cabled transmission, a physical connection might be defect, while in radio transmission, the signal might drop out temporarily or there might be electromagnetic interference. Possible causes can vary a lot between environments, but a highly dynamic environment with many mechanical and electric parts such as an electric race car is likely to produce outliers at some point.
 
 Outliers can be classified in four broad categories~\cites[p.~19]{Kabzan.2019}[p.~165~ff.]{Himmelblau.1994}, shown in figure~\ref{fig:outlier-types}:
@@ -64,13 +64,13 @@ Another rudimentary method for detecting spikes is the difference of consecutive
 Performing a sanity check is a good first approach to detect gross outliers. However, the thresholds should be set rather high to avoid false positives.
 
 
-\subsection{Statistical Methods}
+\subsection{Statistical Methods}\label{sec:outlier-statisticalmethods}
 Methods based on the statistical properties of a signal can provide more granular checks than the previous rudimentary methods. One of the simplest robust statistics is the median, i.e. the center value when sorting a list of values, which is used in the method shown in equation \ref{eq:outlier-median}~\cite[p.~142]{Basu.2007}. An expected value $\tilde{z}_t$ is calculated using both the median of the last $k$ samples and the median of the differences of the last $k+1$ samples. If the difference between the expected and the actual value exceeds the threshold, the current sample is marked as outlier. The window size $k$ influences the robustness but also the detection delay, and should therefore be chosen carefully. Note that, once the outlier persists for more than $k$ samples, following measurements will be regarded as valid.
 \begin{equation}\label{eq:outlier-median}%
 \abs*{z_t - \underbrace{median(z_{t-k}, \ldots, z_{t-1}) + k \cdot median(z_{t-k} - z_{t-k-1}, \ldots, z_{t-1} - z_{t-2})}_\textrm{$\tilde{z}_t$}} < \tau%
 \end{equation}
 
-If an \gls{ekf} is used, a chi-squared test can be used to detect anomalies based on the residuals, as shown in equation \ref{eq:outlier-chisquared}~\cites[p.~4292]{Hausman.2016}[p.~2050~f.]{Valls.2018}. Since the residual $y$ is Gaussian distributed with the innovation covariance matrix $P_{yy}$ (for nomenclature, refer to section \ref{sec:background-ekf}), the normalized sum of squares of the residual values should be distributed according to a chi-squared distribution $\chi^2$ with as many degrees of freedom as there are measurements. An outlier is detected when the chi-squared test at a significance level of $\tau$ failed.
+If an \gls{ekf} is used, a chi-squared test can be used to detect anomalies based on the residuals, as shown in equation \ref{eq:outlier-chisquared}~\cites[p.~4292]{Hausman.2016}[p.~2050~f.]{Valls.2018}. Since the residual $y$ is Gaussian distributed with the innovation covariance matrix $P_{yy}$ (for nomenclature, refer to section \ref{sec:background-ekf}), the normalized sum of squares of the residual values should be distributed according to a chi-squared distribution $\chi^2$ with as many degrees of freedom as there are measurements. An outlier is detected when the chi-squared test at a significance level of $\tau$ fails.
 \begin{subequations}\label{eq:outlier-chisquared}
 \begin{alignat}{2}%
 y &= z - h(\hat{x}^-) \\%
