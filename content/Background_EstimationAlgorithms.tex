@@ -1,7 +1,7 @@
-Obtaining the true state of some physical system is next to impossible. Any sensor measurement contains noise and other errors, which distract from the underlying process. Therefore, the challenge is discerning errors from the true value. This is known as \textit{filtering problem}, where we want to obtain the best estimate $\hat{x}_k$ of the system state $x_k$ at time step $k$ based on past observations $z_i, i \leq k$~\cite[p.~67]{Mitter.1996}. Usually, this involves the fusion of multiple sensors and physical models. In this section we explore common estimation methods to solve the filtering problem problem. We will regard their discrete-time instead of their continuous-time versions, since digital observations are based on sampling with a finite rate.
+Obtaining the true state of some physical system is next to impossible. Any sensor measurement contains noise and other errors, which distract from the underlying process. Therefore, the challenge is discerning errors from the true value. This is known as \textit{filtering problem}, where we want to obtain the best estimate $\hat{x}_k$ of the system state $x_k$ at time step $k$ based on past observations $z_i, i \leq k$~\cite[p.~67]{Mitter.1996}. Usually, this involves the fusion of multiple sensors and physical models. In this section we explore common estimation methods to solve the filtering problem. We will regard their discrete-time instead of their continuous-time versions, since digital observations are based on sampling with a finite rate.
 
 \subsection{Extended Kalman Filter}\label{sec:background-ekf}
-The Kalman filter~\cite{Kalman.1960} is the most widely used estimation algorithm~\cite[p.~401]{Julier.2004}. First developed for trajectory estimation in the Apollo space program, it now finds application in most vehicles, aircraft, spacecraft, but even in finance and econometrics. The Kalman filter assumes a linear system, which is often not the case, or only true in a small region of the full range. Therefore, a non-linear version based on the same ideas has been developed with the \gls{ekf}, which we will regard in this section.
+The Kalman filter~\cite{Kalman.1960} is the most widely used estimation algorithm~\cite[p.~401]{Julier.2004}. With the trajectory estimation for the Apollo space program being one of its first notable applications~\cite{Grewal.2010}, it can now be found not only in many vehicles, aircraft, spacecraft, but even in finance and econometrics. The Kalman filter assumes a linear system, which is often not the case, or only true in a small region of the full range. Therefore, a non-linear version based on the same ideas has been developed with the \gls{ekf}, which we will regard in this section.
 
 The idea of the \gls{ekf} is simple yet powerful: we observe the physical system through noisy measurements but predict the state with a mathematical model of the system. At every time step, we fuse the observations with the predictions based on our confidence in either, basically resulting in a weighted average. For example, a noisy measurement is rather unreliable, while models can never capture all nuances and uncertainties. The fusion yields a good estimate of the true state of the system, better than only measurements or predictions could alone.
 
@@ -10,7 +10,7 @@ The model describes the \textit{state} $x_k$ of the system at time $k$. For exam
 x_k = f(x_{k-1}, u_k) + w_k%
 \end{equation}
 
-While the state is inherent to the system, it can not be directly observed. Rather, we have \textit{observations} $z_k$. The elements of $z_k$ and $x_k$ must not necessarily coincide, i.e. the observation space and state space can differ; for example, we might have multiple observations of the train's velocity but none of the position. The measurement is described by the \textit{measurement equation} \ref{eq:ekf-measurement-equation}. The measurement function $h(x_k)$ gives the observation vector which is disturbed by measurement noise, e.g., resulting from the sensor itself or transmission errors. The measurement noise is assumed to be Gaussian with zero mean and a diagonal covariance matrix $R_k$. We use the measurement equation to be able to fuse real measurements with pseudo-measurements from our model.
+While the state is inherent to the system, it can not be directly observed. Rather, we have \textit{observations} $z_k$. The elements of $z_k$ and $x_k$ must not necessarily coincide, i.e. the observation space and state space can differ; for example, we might have multiple observations of the train's velocity but none of the position. The measurement is described by the \textit{measurement equation} \ref{eq:ekf-measurement-equation}. The measurement function $h(x_k)$ gives the observation vector which is disturbed by measurement noise, e.g., resulting from the sensor itself or transmission errors. The measurement noise is assumed to be Gaussian with zero mean and a diagonal covariance matrix $R_k$. We use the measurement equation to be able to fuse real measurements with predicted measurements from our model.
 \begin{equation}\label{eq:ekf-measurement-equation}%
 z_k = h(x_k) + v_k%
 \end{equation}
@@ -32,8 +32,8 @@ P_k^- &= F_k P_{k-1} F_k^T + Q_k \\%
 F_k &= \left. \frac{\partial f}{\partial x} \right|_{x = \hat{x}_{k-1}^+}%
 \end{align}
 
-The measurement function then generates pseudo-measurements from the estimated state (equation \ref{eq:ekf-pseudomeasurement}).
-\begin{equation}\label{eq:ekf-pseudomeasurement}%
+The measurement function then predicts measurements from the estimated state (equation \ref{eq:ekf-measurement-prediction}).
+\begin{equation}\label{eq:ekf-measurement-prediction}%
 \hat{z}_k = h(\hat{x}_k^-)%
 \end{equation}
 
@@ -45,7 +45,7 @@ K_k &= \underbrace{P_k^- H_k^T}_\textrm{$P_{xy}$} {\underbrace{(H_k P_k^- H_k^T 
 H_k &= \left. \frac{\partial h}{\partial x} \right|_{x = \hat{x}_{k}^-}%
 \end{align}
 
-In the best case, the model and the measurements coincide. However, this is usually not the case, so the real measurements $z_k$ and the pseudo-measurements $\hat{z}_k$ differ, resulting in an \textit{innovation} $y_k$, also called \textit{residual}. The absolute innovation is higher when there is a larger mismatch between the model and the real system. The Kalman gain now determines, how much of the residual is used to correct the prediction. The posterior state estimate $\hat{x}_k^+$ is the final, best estimate for the iteration $k$ and will be used in the next time step (equation \ref{eq:ekf-state-correction}).
+In the best case, the model and the measurements coincide. However, this is usually not the case, so the real measurements $z_k$ and the predicted measurements $\hat{z}_k$ differ, resulting in an \textit{innovation} $y_k$, also called \textit{residual}. The absolute innovation is higher when there is a larger mismatch between the model and the real system. The Kalman gain now determines, how much of the residual is used to correct the prediction. The posterior state estimate $\hat{x}_k^+$ is the final, best estimate for the iteration $k$ and will be used in the next time step (equation \ref{eq:ekf-state-correction}).
 \begin{equation}\label{eq:ekf-state-correction}%
 \hat{x}_k^+ = \hat{x}_k^- + K(\underbrace{z_k - \hat{z}_k}_\textrm{$y_k$})%
 \end{equation}

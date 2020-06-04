@@ -1,6 +1,6 @@
-The state estimation of a vehicle sits at the junction of vehicle dynamics and control theory. Both knowledge of the dynamics of a race car and the algorithms to model their physics in equations and software is required to design a successful solution. Therefore, we explore the fundamentals of vehicle dynamics, estimation algorithms and sensor outlier detection in this chapter.
+The state estimation of a vehicle sits at the junction of vehicle dynamics and control theory. Both knowledge of the dynamics of a race car and the algorithms to model their physics in equations and software is required to design a successful solution. Therefore, we explore the fundamentals of vehicle dynamics, estimation algorithms and sensor failure detection in this chapter.
 
-Throughout this thesis, the conventions of ISO 8855~\cite{ISO.2011} will be used, which assumes a right-handed coordinate system. The vehicle coordinate system uses an upward $z$-axis with a forward $x$-axis and a leftward $y$-axis, while the earth-fixed coordinate system uses an upward $z$-axis with an eastward $x$-axis and a northward $y$-axis. The vehicle's\gls{cog} is used as origin/reference point of the vehicle coordinate system. In case of mixed coordinate systems, left-superscript will be used to denote the reference frame (e.g., $\prescript{V}{}{x}$ for vehicle coordinates, $\prescript{E}{}{x}$ for earth-fixed coordinates).
+Throughout this thesis, the conventions of ISO 8855~\cite{ISO.2011} will be used, which assumes a right-handed coordinate system. The vehicle coordinate system uses an upward $z$-axis with a forward $x$-axis and a leftward $y$-axis, while the earth-fixed coordinate system uses an upward $z$-axis with an eastward $x$-axis and a northward $y$-axis. We will use the vehicle's \gls{cog} as origin/reference point of the vehicle coordinate system. In case of mixed coordinate systems, left-superscript will be used to denote the reference frame (e.g., $\prescript{V}{}{x}$ for vehicle coordinates, $\prescript{E}{}{x}$ for earth-fixed coordinates).
 
 \section{Rigid Body Kinematics}
 \input{content/Background_RigidBodyKinematics}
@@ -8,5 +8,5 @@ Throughout this thesis, the conventions of ISO 8855~\cite{ISO.2011} will be used
 \section{Estimation Algorithms}
 \input{content/Background_EstimationAlgorithms}
 
-\section{Outlier Detection}
+\section{Failure Detection}
 \input{content/Background_OutlierDetection}

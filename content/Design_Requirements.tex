@@ -22,8 +22,7 @@ Given its goal and environment, several requirements must be fulfilled by our st
 \begin{enumerate}
 \item Accurate estimation of vehicle state: the best possible estimate of the vehicle state given the current measurements and physical knowledge is required for maximal performance
 \item Support for flexible sensors: both the \gls{ev} and \gls{dv} sensor setups must be supported, in the best case the state estimation should handle an arbitrary setup
-\item Robustness towards outliers and failures: outliers and sensor failures may occur at any time and should not have an adverse effect on the estimation, which requires detection and appropriate handling
-\item Support for variable sampling rates: measurements arriving at different rates must be supported, as mentioned in the previous section
+\item Robustness towards failures: outliers and other sensor failures may occur at any time and should not have an adverse effect on the estimation, which requires detection and appropriate handling
 \end{enumerate}
 
 Additionally, our philosophy for the design and architecture is a preference for simplicity, according to Occam's razor (\enquote{the simplest solution is most likely the right one}). This is especially true if two methods work equally well but one is simpler. Only if simple methods do not yield the desired result, try more complex and complicated approaches. This philosophy has numerous benefit. A simple solution is one that makes less assumptions, and therefore generalizes better. It is also easier to understand, reason about and troubleshoot. This is of special significance for the application of the state estimation in a Formula Student team, where members and component maintainers change yearly and cannot dive deep into every topic. We apply this philosophy to small components but also to the high-level architecture, which facilitates maintenance and extension.
