@@ -1,22 +1,11 @@
-Race cars have fascinated people, built quickly after first car
-instead of comfort, max performance
-more examples of tradeoffs
+It was not even ten years after the invention of the automobile that people started to compete with them in races. Ever since, participants and spectators alike are fascinated by the combination of high-tech vehicles and human drivers, with the most popular racing series attracting over 450 million unique viewers every year~\cite{FormulaOneWorldChampionshipLimited.2020}. Other than consumer cars, comfort and convenience is traded off for maximum performance, pushing technical limits ever further. Lately, electrical cars are gaining traction, and with them new possibilities for race car engineers.
 
 \section{Problem}
-more than xx years since first car
-while mindset is same, now there are electric race cars
-new possibilities because of \gls{4wd} and computing power
-individual torque on each wheel
-computer assist driver in getting max performance, execution of driver commands with optimal use of vehicle potential
-TC, TV, battery management
-components need estimate of vehicle state
-task of state estimation which delivers good estimate even in face of sensor failures and unpredictable environment
+Many electric cars are powered not by a central engine but by four wheel-individual motors. Additionally, these cars have the computing power to run complex \glsdesc{vdc} software, which helps to execute the driver's wishes while exploiting the maximum physical potential of the vehicle. Components like a \glsdesc{tc} or \glsdesc{tv} limit and control each wheel's torque requests to optimize dynamic behavior and increase vehicle agility and stability. These components need a good estimate of the vehicle state as foundation for making optimal decisions and thereby increasing vehicle performance. Therefore, a state estimation that provides an accurate and robust vehicle state estimate even in the face of sensor failures and in unpredictable environments is required.
 
 \section{Scope}
-this thesis describes design of a robust, accurate, flexible state estimation for a formula student race car
-maybe a research question?
-this state estimation fuses available sensors and detects outliers
-first background, then design and implementation
-then evaluation with measurement data
+This thesis describes the design and implementation of a robust, accurate and flexible state estimation for two Formula Student-type race car with different sensor setups, detailing our thought process and considerations. We propose a three-stage architecture including an \glsdesc{imu} fusion, an extended Kalman filter and unified failure and sensor setup detection that we successfully apply in a simulation with recorded measurement data.
 
-project for DHBW engineering team but works in other cars as well
+First, we provide background information on vehicle kinematics and present state-of-the-art estimation algorithms and failure detection methods (Chapter 2). Next, we analyze the vehicle platform and establish requirements for the state estimation architecture and components presented afterwards (Chapter 3). We describe the implementation as Simulink model (Chapter 4), which we use to evaluate the accuracy and robustness of the state estimation (Chapter 5). We conclude by proposing possible future improvements.
+
+This project was conducted for the Formula Student team \textit{DHBW Engineering Stuttgart e.V.}
