@@ -5,7 +5,7 @@ The state estimation described in this thesis will be deployed to two electric \
 \end{itemize}
 These vehicles will in the following be referred to as \gls{ev} and \gls{dv}, respectively. Note that the \gls{dv} is electric as well but has additional components required for autonomous driving.
 
-\subsection{Sensor Setup}
+\subsection{Sensor Setup}\label{sec:design-sensor-setup}
 The vehicles are equipped with a plethora of sensors, which can be used for state estimation. While some sensors like the ones for brake pressure are not relevant, most provide useful information. The relevant sensors are listed in table \ref{tab:sensor}, with the last two columns denoting in which vehicle they are available. The sensors' locations in the vehicle shown in figure \ref{fig:sensor-locations} In the ideal case, both vehicles would have the all sensors, since working with a homogeneous set of measurements is simpler, but financial and weight considerations mean that only the sensors necessary for the vehicle's use case are available.
 
 \begin{table}[h]

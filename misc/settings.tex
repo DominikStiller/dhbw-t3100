@@ -35,6 +35,7 @@
 \usepackage[bottom,hang,flushmargin]{footmisc}
 \usepackage[toc,nonumberlist,acronym,nopostdot]{glossaries}
 \usepackage[intoc]{nomencl}
+\usepackage{etoolbox}
 \usepackage[
 	backend=biber,
 	bibwarn=true,
@@ -133,10 +134,16 @@
 % nomencl
 \renewcommand{\nomname}{List of Symbols}
 \newcommand{\nomunit}[1]{\renewcommand{\nomentryend}{\hspace*{\fill}\si{#1}}}
+\renewcommand\nomgroup[1]{%
+  \item[\bfseries
+  \ifstrequal{#1}{P}{Physics Constants}{%
+  \ifstrequal{#1}{N}{Number Sets}{%
+  \ifstrequal{#1}{O}{Other Symbols}{}}}%
+]}
 \makenomenclature
 
 % Enable ligatures in pdf figures
-\pdfinclusioncopyfonts=1
+%\pdfinclusioncopyfonts=1
 
 % pifont
 \newcommand{\xmark}{\ding{53}}%
