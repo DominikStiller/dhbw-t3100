@@ -6,25 +6,40 @@ A fundamental problem with evaluation of state estimations is the lack of ground
 
 
 \subsection{IMU Fusion}
-The \gls{imu} fusion is the only part of the preprocessing stage we will evaluate, since everything else is straightforward physical transformations. Figure \ref{fig:imu-fusion-real} shows the input measurements from two \glspl{imu} mounted about \SI{80}{\centi\meter} in front and behind \gls{cog} (see section \ref{sec:design-sensor-setup}) as well as the result of their mean-based fusion. The maximum-likelihood-based fusion does not work with the above setup since singular matrices occur, but after adjusting the position parameters for the algorithm to have a small non-zero $y$-position, it gives the same results as the mean-based fusion for $a_x$, $a_y$, $\dot{\psi}$ and $\ddot{\psi}$. Notice how the fusion result is effectively the mean of both inputs and still rather noisy, despite being somewhat reduced. The full measurements and fusion results can be found in appendix \ref{sec:appendix-imufusion}.
+The \gls{imu} fusion is the only part of the preprocessing stage we will evaluate, since everything else is straightforward physical transformations. Figure \ref{fig:imu-fusion} shows the input measurements from two \glspl{imu} mounted about \SI{80}{\centi\meter} in front and behind \gls{cog} (see section \ref{sec:design-sensor-setup}) as well as the result of their mean-based fusion. The maximum-likelihood-based fusion does not work with the above setup since singular matrices occur, but after adjusting the position parameters for the algorithm to have a small non-zero $y$-position, it gives the same results as the mean-based fusion for $a_x$, $a_y$, $\dot{\psi}$ and $\ddot{\psi}$. Notice how the fusion result is effectively the mean of both inputs and still rather noisy, despite being somewhat reduced. The full measurements and fusion results can be found in appendix \ref{sec:appendix-imufusion}.
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\textwidth]{plot_imu_fusion}%
 	\caption{\gls{imu} measurements and fusion results}
-	\label{fig:imu-fusion-real}
+	\label{fig:imu-fusion}
 \end{figure}
 
+
 \subsection{Failure Detection}
+The effect of the failure detection on the state estimate is shown in figure \ref{fig:failure-detection} for the velocity estimate. The measurement of the optical velocity sensor has a null at around \SI{400}{\milli\second} and two less severe outliers before. The sanity check detects transients through the maximum plausible difference of consecutive samples. It reacts quickly but cannot detect persistent outliers such as the null. The \gls{ekf} bank does not detect the two outliers at the beginning, but excels at detecting the persistent null. Notice how the estimate of much more stable and robust to failures when enabling debouncing with a time of \SI{50}{\milli\second}.
 
-Sanity Check:
-compare max change rate and mean based
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\textwidth]{plot_failure_detection}%
+	\caption{Different failure detection modes}
+	\label{fig:failure-detection}
+\end{figure}
 
-EKF Bank:
-show all wssrs for ekf bank
-compare with median outlier detection approaches
+Figure \ref{fig:failure-detection-nssr} shows how large residuals are generated for the \gls{ekf} instances of the bank that do not include the optical sensor. When both residuals cross the threshold, the measurement of the optical sensor is marked as failure. When only one residual crosses the threshold, an outlier cannot be confidently detected. The measurements and residuals of all three velocity sensors for this example can be found in appendix \ref{sec:appendix-failure-detection}. The intermittency of the residuals stems is a result of the difference of \gls{vdc} execution rate and measurement rates.
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\textwidth]{plot_failure_detection_nssr}%
+	\caption{Normalized sums of squared residuals of \gls{ekf} bank}
+	\label{fig:failure-detection-nssr}
+\end{figure}
+
+The configuration of thresholds and debouncing time has a large impact on failure detection performance. The choice of parameters is always a tradeoff between false positives and false negatives. For example, the \gls{ekf} bank would have recognized the two outliers with a lower threshold, but would be much more prone to noise. Furthermore, a long debouncing time means that a sensor has more time to recover, but that the \gls{ekf} relies only on the model during that time.
+
 
 \subsection{EKF}
+
 
 compare raw measurements with velocity estimate
 show results for each state variable
