@@ -17,7 +17,7 @@ The \gls{imu} fusion is the only part of the preprocessing stage we will evaluat
 
 
 \subsection{Failure Detection}
-The effect of the failure detection on the state estimate is shown in figure \ref{fig:failure-detection} for the velocity estimate. The measurement of the optical velocity sensor has a null at around \SI{400}{\milli\second} and two less severe outliers before. The sanity check detects transients through the maximum plausible difference of consecutive samples. It reacts quickly but cannot detect persistent outliers such as the null. The \gls{ekf} bank does not detect the two outliers at the beginning, but excels at detecting the persistent null. Notice how the estimate of much more stable and robust to failures when enabling debouncing with a time of \SI{50}{\milli\second}.
+The effect of the failure detection on the state estimate is shown in figure \ref{fig:failure-detection} for the velocity estimate. The measurement of the optical velocity sensor has a null at around \SI{400}{\milli\second} and two less severe outliers before. The sanity check detects transients through the maximum plausible difference of consecutive samples. It reacts quickly but cannot detect persistent outliers such as the null. The \gls{ekf} bank does not detect the two outliers at the beginning, but excels at detecting the persistent null. Notice how the estimate of much more stable and robust to failures with the failure detection, since the faulty measurements are disabled in the \gls{ekf} and other sensors and the model prediction are used. The stability increases when enabling debouncing with a time of \SI{50}{\milli\second}.
 
 \begin{figure}[t]
 	\centering
@@ -39,27 +39,27 @@ The configuration of thresholds and debouncing time has a large impact on failur
 
 
 \subsection{EKF}
+The estimated longitudinal and lateral velocities from the \gls{ekf} are shown in figure \ref{fig:ekf-velocities}. They have much less noise than the sensor measurements and are generally not affected by failures such as spikes in the motor speeds at \SI{5.5}{\second} or the outliers of the optical sensor at \SI{16}{\second}. The residuals for the longitudinal velocity have a mean of zero, which means that predictions match the measurements well, and are low even then the optical sensor is disabled. However, the estimated lateral velocity generally has a lower absolute value than the measurement, which could indicate an inaccurate model. This is especially obvious when disabling the optical sensor, as would be the case in the \gls{dv}.
 
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\textwidth]{plot_ekf_velocities}%
+	\caption{\gls{ekf} estimate for velocities}
+	\label{fig:ekf-velocities}
+\end{figure}
 
-compare raw measurements with velocity estimate
-show results for each state variable
-effect of different debouncing times and thresholds
-show velocity without kistler to simulate dv
-bad position in EV without heading measurements, because velocity cannot be used properly to estimate position
+The quality of the position estimate depends strongly on the knowledge of the heading, since it related the velocity to the predicted position. Heading measurements are only available in the \gls{dv}, but were not available for evaluation. Therefore we compare the estimates without an initial heading, i.e. $\psi_0 = 0$, and with an initial heading guessed from the vehicle's movement in figure \ref{fig:ekf-position}. The estimate follows the measurement much more closely in the latter case, with lower residuals than when no initial heading is known. The heading itself comes only from the prediction using the yaw rate and is not corrected by measurements. Note that the initial heading is usually not known.
+% TODO residuals in appendix
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\textwidth]{plot_ekf_pos}%
+	\caption{\gls{ekf} estimate for position and heading}
+	\label{fig:ekf-position}
+\end{figure}
 
-
-
-
-
+Since the \gls{ekf} estimate is essentially a weighted average, the result varies with the measurement covariance settings. A detailed sensitivity analysis is beyond the scope of this thesis, but in practice, empirically determined settings should be enough.
 
 \section{Discussion}
-Discussion, impact of results on esleek
-prepare for DV
-initialization of position, maybe not include position when heading is unavailable
+The results presented in the previous section show, that the state estimation generally works well and improves the quality beyond what raw measurements could provide. The estimate of the longitudinal velocity when the optical sensor is available is especially robust, an important prerequisite for good \gls{tc} performance. The different sensor setups between \gls{ev} and \gls{dv} remain somewhat of a challenge. The evaluation shows that the position estimation only works well with heading measurements, therefore it might be better use raw \gls{gnss} measurements for the \gls{ev}, since a good position estimate is only relevant for the \gls{dv}. Also, the optical velocity sensor is crucial for a good lateral velocity estimate, but a non-linear single track model instead of the kinematic model might mitigate this problem in case the sensor is unavailable.
 
-imu fusion maybe better with 3 imus and max likelihood
-use mean based fusion because occams razor and same results and less computation
-
-only testing can show if outlier detection works, if not maybe try chi-squared test and variance test
-
-
+However, the state estimation needs more extensive testing in real driving situations, on the one hand to calibrate and parametrize the outlier detection and the \gls{ekf}, on the other hand to see if it generalizes well, since the measurement data used for the simulation are not very diverse. Furthermore, they do not include heading measurements and only two \glspl{imu}. With a third \gls{imu}, the maximum-likelihood-based fusion should be revisited, but with two \glspl{imu}, the mean-based fusion is preferable due to its simplicity and less computational complexity. Lastly, other failure detection approaches such as the chi-squared test and variance test can be evaluated in case the present approaches are insufficient.
