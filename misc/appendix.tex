@@ -62,7 +62,7 @@ H = \begin{bmatrix}%
 \end{bmatrix}%
 \end{equation*}
 
-\chapter{Full Results}
+\chapter{Evaluation Results}
 
 \section{IMU Fusion}\label{sec:appendix-imufusion}
 \subsection{Raw Data From Front IMU}
@@ -77,3 +77,24 @@ H = \begin{bmatrix}%
 \section{Failure Detection}\label{sec:appendix-failure-detection}
 \subsection{EKF Bank Residual Analysis}
 \includegraphics[width=\textwidth]{plot_failure_detection_nssr_full}
+
+\section{EKF Estimates and Residuals}\label{sec:appendix-ekf}
+\subsection{Position from GNSS without initial heading}
+\includegraphics[width=\textwidth]{plot_ekf_full_xy_noheading}
+\subsection{Position from GNSS with initial heading}
+\includegraphics[width=\textwidth]{plot_ekf_full_xy_heading}
+\subsection{Longitudinal velocity from optical sensor}
+\includegraphics[width=\textwidth]{plot_ekf_full_vx_sfii}
+\subsection{Lateral velocity from optical sensor}
+\includegraphics[width=\textwidth]{plot_ekf_full_vy_sfii}
+\subsection{Longitudinal velocity from GNSS}
+\includegraphics[width=\textwidth]{plot_ekf_full_vx_gps}
+The \gls{gnss} velocity measurement is not used during normal operation, therefore it does not influence the estimate and residuals are zero.
+\subsection{Longitudinal velocity from motor speeds}
+\includegraphics[width=\textwidth]{plot_ekf_full_vx_wheels}
+\subsection{Heading from GNSS without initial heading}
+\includegraphics[width=\textwidth]{plot_ekf_full_psi}
+\subsection{Heading from GNSS with initial heading}
+\includegraphics[width=\textwidth]{plot_ekf_full_psi_heading}
+\subsection{Yaw rate from IMUs}
+\includegraphics[width=\textwidth]{plot_ekf_full_dpsi}

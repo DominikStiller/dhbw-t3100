@@ -1,28 +1,53 @@
-% TODO group by area (kinematics, estimation,...)
-\nomenclature[P]{$p$}{Linear position in earth-fixed coordinates\nomunit{\meter}}
-\nomenclature{$x$}{$x$-axis component of linear position in earth-fixed coordinates\nomunit{\meter}}
-\nomenclature{$y$}{$y$-axis component of linear position in earth-fixed coordinates\nomunit{\meter}}
-\nomenclature{$z$}{$z$-axis component of linear position in earth-fixed coordinates\nomunit{\meter}}
-\nomenclature{$r$}{Linear position in vehicle coordinates\nomunit{\meter}}
-\nomenclature{$v$}{Linear velocity\nomunit{\meter\per\second}}
-\nomenclature{$a$}{Linear accleration\nomunit{\meter\per\square\second}}
-\nomenclature{$\beta$}{Vehicle sideslip angle\nomunit{\radian}}
+\nomenclature[A]{$\mathbb{0}$}{Zero vector}
+\nomenclature[A]{$I$}{Identity matrix of appropriate dimensions}
 
-\nomenclature{$\varphi$}{Angular orientation\nomunit{\radian}}
-\nomenclature{$\phi$}{Angular orientation around $x$-axis/roll angle\nomunit{\radian}}
-\nomenclature{$\theta$}{Angular orientation around $y$-axis/pitch angle\nomunit{\radian}}
-\nomenclature{$\psi$}{Angular orientation around $z$-axis/yaw angle\nomunit{\radian}}
-\nomenclature{$\omega$}{Angular velocity\nomunit{\radian\per\second}}
-\nomenclature{$\alpha$}{Angular accleration\nomunit{\radian\per\square\second}}
+% Vehicle Kinematics
+\nomenclature[B]{$p$}{Linear position in earth-fixed coordinates\nomunit{\meter}}
+\nomenclature[B]{$x$}{$x$-axis component of linear position in earth-fixed coordinates\nomunit{\meter}}
+\nomenclature[B]{$y$}{$y$-axis component of linear position in earth-fixed coordinates\nomunit{\meter}}
+\nomenclature[B]{$z$}{$z$-axis component of linear position in earth-fixed coordinates\nomunit{\meter}}
+\nomenclature[B]{$r$}{Linear position in vehicle coordinates\nomunit{\meter}}
+\nomenclature[B]{$v$}{Linear velocity\nomunit{\meter\per\second}}
+\nomenclature[B]{$a$}{Linear accleration\nomunit{\meter\per\square\second}}
+\nomenclature[B]{$\beta$}{Vehicle sideslip angle\nomunit{\radian}}
 
-\nomenclature{$R$}{Corner radius\nomunit{\meter}}
+\nomenclature[B]{$\varphi$}{Angular orientation\nomunit{\radian}}
+\nomenclature[B]{$\phi$}{Angular orientation around $x$-axis/roll angle\nomunit{\radian}}
+\nomenclature[B]{$\theta$}{Angular orientation around $y$-axis/pitch angle\nomunit{\radian}}
+\nomenclature[B]{$\psi$}{Angular orientation around $z$-axis/yaw angle\nomunit{\radian}}
+\nomenclature[B]{$\omega$}{Angular velocity\nomunit{\radian\per\second}}
+\nomenclature[B]{$\alpha$}{Angular accleration\nomunit{\radian\per\square\second}}
 
-\nomenclature{$\mathbb{0}$}{Zero vector\nomunit{1}}
+\nomenclature[B]{$R$}{Corner radius\nomunit{\meter}}
 
-\nomenclature{$\omega_{wheel}$}{Wheel speed\nomunit{\radian\per\second}}
-\nomenclature{$\omega_{motor}$}{Motor speed\nomunit{\radian\per\second}}
-\nomenclature{$r_{dyn}$}{Dynamic tire radius\nomunit{\meter}}
-\nomenclature{$i_{gear}$}{Gear ratio from motor to wheels\nomunit{1}}
+\nomenclature[B]{$\omega_{wheel}$}{Wheel speed\nomunit{\radian\per\second}}
+\nomenclature[B]{$\omega_{motor}$}{Motor speed\nomunit{\radian\per\second}}
+\nomenclature[B]{$r_{dyn}$}{Dynamic tire radius\nomunit{\meter}}
+\nomenclature[B]{$i_{gear}$}{Gear ratio from motor to wheels\nomunit{1}}
 
-\nomenclature{$\tau$}{Threshold for failure detection methods\nomunit{*}}
-% TODO add EKF stuff
+% State Estimation
+\nomenclature[C]{$k$}{Discrete time\nomunit{\second}}
+\nomenclature[C]{$x$}{System state}
+\nomenclature[C]{$\hat{x}$}{Estimate of system state}
+\nomenclature[C]{$P$}{Covariance of system state estimate}
+\nomenclature[C]{$z$}{Observations/measurements}
+\nomenclature[C]{$u$}{System inputs}
+\nomenclature[C]{$f(\cdot)$}{Process function of system}
+\nomenclature[C]{$F$}{Jacobian of process function with respect to system state}
+\nomenclature[C]{$h(\cdot)$}{Observation function of system}
+\nomenclature[C]{$H$}{Jacobian of measurement function with respect to system state}
+\nomenclature[C]{$w$}{Process noise}
+\nomenclature[C]{$Q$}{Covariance of process noise}
+\nomenclature[C]{$v$}{Measurement noise}
+\nomenclature[C]{$R$}{Covariance of measurement noise}
+\nomenclature[C]{$(\cdot)^-$}{Prior/before correction}
+\nomenclature[C]{$(\cdot)^+$}{Posterior/after correction}
+\nomenclature[C]{$y$}{Residual/innovation}
+\nomenclature[C]{$P_{xx}$}{Covariance of residual}
+\nomenclature[C]{$P_{xy}$}{Covariance of state and residual}
+\nomenclature[C]{$K$}{Kalman gain}
+
+% Failure Detection
+\nomenclature[D]{$\tau$}{Threshold for failure detection methods}
+\nomenclature[D]{$\chi^2(\cdot)$}{Inverse cumulative distribution function of the chi-squared distribution with appropriate degrees of freedom}
+\nomenclature[D]{$\mu$}{Arithmetic mean}

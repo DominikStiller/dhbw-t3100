@@ -100,9 +100,9 @@
 \renewcommand*{\glsgroupskip}{}
 
 % chngcntr
-\counterwithout{figure}{chapter}
-\counterwithout{table}{chapter}
-\counterwithout{equation}{chapter}
+%\counterwithout{figure}{chapter}
+%\counterwithout{table}{chapter}
+%\counterwithout{equation}{chapter}
 
 % minted
 \usemintedstyle{friendly}
@@ -135,15 +135,18 @@
 \renewcommand{\nomname}{List of Symbols}
 \newcommand{\nomunit}[1]{\renewcommand{\nomentryend}{\hspace*{\fill}\si{#1}}}
 \renewcommand\nomgroup[1]{%
+  \vspace{2em}%
   \item[\bfseries
-  \ifstrequal{#1}{P}{Physics Constants}{%
-  \ifstrequal{#1}{N}{Number Sets}{%
-  \ifstrequal{#1}{O}{Other Symbols}{}}}%
+  \ifstrequal{#1}{A}{General}{%
+  \ifstrequal{#1}{B}{Vehicle Kinematics}{%
+  \ifstrequal{#1}{C}{State Estimation}{%
+  \ifstrequal{#1}{D}{Failure Detection}{}}}}%
 ]}
+\setlength{\nomitemsep}{-0.9\parsep}
 \makenomenclature
 
 % Enable ligatures in pdf figures
-%\pdfinclusioncopyfonts=1
+\pdfinclusioncopyfonts=1
 
 % pifont
 \newcommand{\xmark}{\ding{53}}%

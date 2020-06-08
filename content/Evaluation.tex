@@ -11,7 +11,7 @@ The \gls{imu} fusion is the only part of the preprocessing stage we will evaluat
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\textwidth]{plot_imu_fusion}%
-	\caption{\gls{imu} measurements and fusion results}
+	\caption{IMU measurements and fusion results}
 	\label{fig:imu-fusion}
 \end{figure}
 
@@ -26,12 +26,12 @@ The effect of the failure detection on the state estimate is shown in figure \re
 	\label{fig:failure-detection}
 \end{figure}
 
-Figure \ref{fig:failure-detection-nssr} shows how large residuals are generated for the \gls{ekf} instances of the bank that do not include the optical sensor. When both residuals cross the threshold, the measurement of the optical sensor is marked as failure. When only one residual crosses the threshold, an outlier cannot be confidently detected. The measurements and residuals of all three velocity sensors for this example can be found in appendix \ref{sec:appendix-failure-detection}. The intermittency of the residuals stems is a result of the difference of \gls{vdc} execution rate and measurement rates.
+Figure \ref{fig:failure-detection-nssr} shows how large residuals are generated for the \gls{ekf} instances of the bank that do not include the optical sensor. When both \glspl{nssr} cross the threshold, the measurement of the optical sensor is marked as failure. When only one \glspl{nssr} crosses the threshold, an outlier cannot be confidently detected. The measurements and \glspl{nssr} of all three velocity sensors for this example can be found in appendix \ref{sec:appendix-failure-detection}. The intermittency of the residuals stems is a result of the difference of \gls{vdc} execution rate and measurement rates.
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\textwidth]{plot_failure_detection_nssr}%
-	\caption{Normalized sums of squared residuals of \gls{ekf} bank}
+	\caption{Normalized sums of squared residuals of EKF bank}
 	\label{fig:failure-detection-nssr}
 \end{figure}
 
@@ -39,21 +39,21 @@ The configuration of thresholds and debouncing time has a large impact on failur
 
 
 \subsection{EKF}
-The estimated longitudinal and lateral velocities from the \gls{ekf} are shown in figure \ref{fig:ekf-velocities}. They have much less noise than the sensor measurements and are generally not affected by failures such as spikes in the motor speeds at \SI{5.5}{\second} or the outliers of the optical sensor at \SI{16}{\second}. The residuals for the longitudinal velocity have a mean of zero, which means that predictions match the measurements well, and are low even then the optical sensor is disabled. However, the estimated lateral velocity generally has a lower absolute value than the measurement, which could indicate an inaccurate model. This is especially obvious when disabling the optical sensor, as would be the case in the \gls{dv}.
+The estimated longitudinal and lateral velocities from the \gls{ekf} with failure detection are shown in figure \ref{fig:ekf-velocities}. They have much less noise than the sensor measurements and are generally not affected by failures such as spikes in the motor speeds at \SI{5.5}{\second} or the outliers of the optical sensor at \SI{16}{\second}. The residuals for the longitudinal velocity have a mean of zero, which means that predictions match the measurements well, and are low even then the optical sensor is disabled. However, the estimated lateral velocity generally has a lower absolute value than the measurement, which could indicate an inaccurate model. This is especially obvious when disabling the optical sensor, as would be the case in the \gls{dv}. All \gls{ekf} estimates and their residuals can be found in appendix \ref{sec:appendix-ekf}.
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\textwidth]{plot_ekf_velocities}%
-	\caption{\gls{ekf} estimate for velocities}
+	\caption{EKF estimate for velocities}
 	\label{fig:ekf-velocities}
 \end{figure}
 
-The quality of the position estimate depends strongly on the knowledge of the heading, since it related the velocity to the predicted position. Heading measurements are only available in the \gls{dv}, but were not available for evaluation. Therefore we compare the estimates without an initial heading, i.e. $\psi_0 = 0$, and with an initial heading guessed from the vehicle's movement in figure \ref0{fig:ekf-position}. The estimate follows the measurement much more closely in the latter case, with lower residuals than when no initial heading is known. The heading itself, normalized to be between $-\pi$ and $\pi$, comes only from the prediction using the yaw rate and is not corrected by measurements. Note that the initial heading is usually not known.
-% TODO residuals in appendix
+The quality of the position estimate depends strongly on the knowledge of the heading, since it related the velocity to the predicted position. Heading measurements are only available in the \gls{dv}, but were not available for evaluation. Therefore we compare the estimates without an initial heading, i.e. $\psi_0 = 0$, and with an initial heading guessed from the vehicle's movement in figure \ref{fig:ekf-position}. The estimate follows the measurement much more closely in the latter case, with lower residuals than when no initial heading is known (see appendix \ref{sec:appendix-ekf}). The heading itself, normalized to be between $-\pi$ and $\pi$, comes only from the prediction using the yaw rate and is not corrected by measurements. Note that the initial heading is usually not known.
+
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\textwidth]{plot_ekf_pos}%
-	\caption{\gls{ekf} estimate for position and heading}
+	\caption{EKF estimate of position and heading}
 	\label{fig:ekf-position}
 \end{figure}
 
