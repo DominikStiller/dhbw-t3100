@@ -33,7 +33,7 @@
 \usepackage{csquotes}
 \usepackage{xcolor}
 \usepackage[bottom,hang,flushmargin]{footmisc}
-\usepackage[toc,nonumberlist,acronym,nopostdot]{glossaries}
+\usepackage[toc,nonumberlist,nomain,acronym,nopostdot]{glossaries}
 \usepackage[intoc]{nomencl}
 \usepackage{etoolbox}
 \usepackage[
@@ -135,13 +135,12 @@
 \renewcommand{\nomname}{List of Symbols}
 \newcommand{\nomunit}[1]{\renewcommand{\nomentryend}{\hspace*{\fill}\si{#1}}}
 \renewcommand\nomgroup[1]{%
-  \vspace{2em}%
   \item[\bfseries
   \ifstrequal{#1}{A}{General}{%
   \ifstrequal{#1}{B}{Vehicle Kinematics}{%
   \ifstrequal{#1}{C}{State Estimation}{%
   \ifstrequal{#1}{D}{Failure Detection}{}}}}%
-]}
+]\vspace{2em}\hspace{-\leftmargin}}
 \setlength{\nomitemsep}{-0.9\parsep}
 \makenomenclature
 

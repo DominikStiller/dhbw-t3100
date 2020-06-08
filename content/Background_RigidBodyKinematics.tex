@@ -21,7 +21,7 @@ The linear \textit{position} $p$ of a body comprises a longitudinal component al
 The angular \textit{orientation} $\varphi$ of a body can be described by the roll angle $\phi$ around the $x$-axis, the pitch angle $\theta$ around the $y$-axis and the yaw angle, or heading, $\psi$ around the $z$-axis. The angular velocity $\omega$ and acceleration $\alpha$ describe the element-wise time derivatives of these angles.
 
 
-\subsection{Transformation of Linear Velocities}
+\subsection{Transformation of Linear Velocity}
 Every motion of a rigid body can be decomposed into a linear and an angular component. All points on that body experience the same angular velocity at all times, i.e. $\omega^A = \omega^B$ for any two points $A, B$ on the body. Since we define the \gls{cog} as reference point of the vehicle coordinate system and therefore as center of every rotation, the \gls{cog} will never experience a linear velocity in vehicle coordinates. However, every other point will experience different linear velocities depending on their position $r$ relative to the center of rotation. If there is a non-zero angular velocity, equation \ref{eq:offcenter-velocity-3d} holds for any point $P$, assuming the velocity at the \gls{cog} is known. The expanded form can be found in appendix \ref{sec:appendix-transformation-linvel}.
 
 % For SFII transformation
@@ -47,7 +47,7 @@ Let us regard the example scenario shown in figure \ref{fig:offcenter-velocity},
 \end{figure}
 
 
-\subsection{Transformation of Linear Accelerations}
+\subsection{Transformation of Linear Acceleration}
 Like the angular velocity, the angular acceleration is the same at every point on a rigid body, i.e. $\alpha^A = \alpha^B$ for any two points $A, B$ on that body. However, these two points will generally not experience the same linear acceleration. Only if the rotational motion components $\omega$ and $\alpha$ are zero, the linear acceleration is equal for all points on the body, i.e. $a^A = a^B$. In the general case, equation \ref{eq:offcenter-acceleration-3d}~\cite[p.~140]{Gross.2014} holds for any point $P$ at location $r$. The expanded form can be found in appendix \ref{sec:appendix-transformation-linacc}.
 
 \begin{equation}\label{eq:offcenter-acceleration-3d}%
@@ -80,7 +80,7 @@ We demonstrate these effects in the example scenario shown in figure \ref{fig:of
 \end{figure}
 
 
-\subsection{Calculate Angular Acceleration from Linear Acceleration}
+\subsection{Calculation of Angular Acceleration From Linear Acceleration}
 Direct measurement of the angular acceleration is often not possible. However, individual components of $\alpha$ can be calculated from the difference of two known linear acceleration vectors at different points $A, B$ with locations $r^A, r^B$ using equation \ref{eq:angacc-from-linacc-3d}. It is derived from equation \ref{eq:offcenter-acceleration-3d}, with $\Delta a = a^A - a^B$, $\Delta r = r^A - r^B$, and $a^{CG}$ being eliminated by the difference. The points must not be on the rotation axis of the calculated component of $\alpha$, otherwise they experience no angular acceleration. Thus, at least three non-collinear points are required to determine all components of $\alpha$. While the inverse of a cross product is not uniquely determined, as can be seen by the scalar factor $t$, $t = 0$ works well in practice.
 
 \begin{equation}\label{eq:angacc-from-linacc-3d}%
@@ -108,7 +108,7 @@ Most sensor measurements are done in the vehicle coordinate system. Others, such
 \end{equation}
 
 
-\subsection{Cornering Acceleration}\label{sec:background-cornering-acceleration}
+\subsection{Calculation of Cornering Acceleration}\label{sec:background-cornering-acceleration}
 The motion of a rigid body in the earth-fixed reference frame can be understood as a composition of a rotation and a translation, in our case with the \gls{cog} as center of rotation. In vehicles, this rotation results from cornering. The acceleration experienced in the \gls{cog} is the result of both the direct linear acceleration and the centripetal force resulting from the rotation, as shown in equation \ref{eq:cornering-acceleration}~\cite[p.~146]{Milliken.1996}. Other than in equation \ref{eq:offcenter-acceleration-3d}, the radius $R$ is not the distance to the \gls{cog} but the corner/curve radius. When driving straight, the radius approaches infinity and the centripetal force vanishes. Since $R$ is usually not known, we can substitute it using $R = v_{\perp} / \dot{\psi}$ with the tangential velocity $v_{\perp}$.
 
 \begin{subequations}\label{eq:cornering-acceleration}
@@ -119,7 +119,7 @@ a_y &= \dot{v}_y + \dot{\psi}^2 R &= \dot{v}_y + \dot{\psi}v_x%
 \end{subequations}
 
 
-\subsection{Velocity Estimation from Motor Speeds}\label{sec:motorspeeds-to-velocity}
+\subsection{Calculation of Velocity From Motor Speeds}\label{sec:motorspeeds-to-velocity}
 While there is a plethora of methods for measuring vehicle velocity, such as optical cross-correlation, radar and 5th wheel, they are too expensive for widespread use and only used as ground truth during vehicle development. Therefore, velocity estimation in many automotive applications is based mainly on motor or wheel speed measurements, which are readily available, especially in electric cars. Equation \ref{eq:wheelspeeds} shows arguably the simplest method to estimate the longitudinal velocity, involving only the dynamic tire radius $r_{dyn}$, the wheel speed $\omega_{wheel}$, the motor speed $\omega_{motor}$ and the motor-to-wheel ratio $i_{gear}$.
 
 \begin{equation}\label{eq:wheelspeeds}%

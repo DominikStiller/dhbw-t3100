@@ -268,3 +268,4 @@ TSWLatexianTemp*
 
 references/RecycleBin/
 .ipynb_checkpoints/
+*.asv
